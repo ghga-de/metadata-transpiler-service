@@ -6,8 +6,6 @@ cors_allowed_headers: null
 cors_allowed_methods: null
 cors_allowed_origins: null
 db_print_logs: false
-db_name: metadata-store
-db_url: mongodb://localhost:27017
 docs_url: /docs
 host: 127.0.0.1
 log_level: info

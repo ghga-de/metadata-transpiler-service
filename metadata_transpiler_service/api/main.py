@@ -19,12 +19,47 @@ Additional endpoints might be structured in dedicated modules
 (each of them having a sub-router).
 """
 
-from fastapi import FastAPI
+from tempfile import SpooledTemporaryFile
+from typing import IO, Union
+
+from fastapi import FastAPI, File, HTTPException, UploadFile
+from ghga_service_chassis_lib.api import configure_app
+
+from metadata_transpiler_service.config import CONFIG
+from metadata_transpiler_service.core.convert import generate_json_from
+from metadata_transpiler_service.creation_models import CreateSubmission
+from metadata_transpiler_service.dao.utils import read_submission_sheets
+from metadata_transpiler_service.mapping import submission_map
 
 app = FastAPI()
+configure_app(app, config=CONFIG)
 
 
 @app.get("/", summary="")
 async def index():
     """Index"""
     return "Index of the GHGA Metadata Transpiler Service"
+
+
+@app.post(
+    "/convert",
+    summary="Given XLSX file, converts it in JSON in Submission format",
+    response_model=CreateSubmission,
+)
+async def convert_xlsx_to_json(file: UploadFile = File(...)):
+    """Convert the uploaded spreadsheet into JSON according to the CreateSubmission model"""
+
+    sheet_names = list(submission_map.keys())
+    temp_file: Union[SpooledTemporaryFile, IO] = file.file
+
+    try:
+        submission_sheets = await read_submission_sheets(temp_file, sheet_names)
+    except Exception as exp:
+        raise HTTPException(
+            status_code=404,
+            detail=(f"Cannot read the input file '{file.filename}': " f"{exp}"),
+        ) from exp
+
+    submission_json = await generate_json_from(submission_sheets)
+
+    return submission_json

@@ -24,9 +24,8 @@ from ghga_service_chassis_lib.config import config_from_yaml
 class Config(ApiConfigBase):
     """Config parameters and their defaults."""
 
-    service_name: str = "metadata_transpiler_service"  # Please adapt
-    db_url: str = "mongodb://localhost:27017"
-    db_name: str = "metadata-store"
+    service_name: str = "metadata_transpiler_service"
+    schema_version = 0.7
 
 
 CONFIG = Config()

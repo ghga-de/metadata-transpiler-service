@@ -13,4 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""DAO interface implementation to connect to the database."""
+"""
+Module containing the utils for convertion.
+"""
+
+from typing import Dict, Union
+
+
+async def map_to(field: str, mapping_scheme: Dict) -> Union[str, None]:
+    """Returns the field name in spreadsheet which contains data entered
+    for a field in submission"""
+    if field not in mapping_scheme:
+        return None
+    return mapping_scheme[field]
