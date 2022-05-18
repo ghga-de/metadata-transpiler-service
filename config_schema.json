@@ -3,50 +3,11 @@
   "description": "Modifies the orginal Settings class provided by the user",
   "type": "object",
   "properties": {
-    "db_url": {
-      "title": "Db Url",
-      "env_names": [
-        "my_microservice_db_url"
-      ],
-      "type": "string"
-    },
-    "db_print_logs": {
-      "title": "Db Print Logs",
-      "default": false,
-      "env_names": [
-        "my_microservice_db_print_logs"
-      ],
-      "type": "boolean"
-    },
-    "service_name": {
-      "title": "Service Name",
-      "default": "my_microservice",
-      "env_names": [
-        "my_microservice_service_name"
-      ],
-      "type": "string"
-    },
-    "rabbitmq_host": {
-      "title": "Rabbitmq Host",
-      "default": "rabbitmq",
-      "env_names": [
-        "my_microservice_rabbitmq_host"
-      ],
-      "type": "string"
-    },
-    "rabbitmq_port": {
-      "title": "Rabbitmq Port",
-      "default": 5672,
-      "env_names": [
-        "my_microservice_rabbitmq_port"
-      ],
-      "type": "integer"
-    },
     "host": {
       "title": "Host",
       "default": "127.0.0.1",
       "env_names": [
-        "my_microservice_host"
+        "metadata_transpiler_service_host"
       ],
       "type": "string"
     },
@@ -54,7 +15,7 @@
       "title": "Port",
       "default": 8080,
       "env_names": [
-        "my_microservice_port"
+        "metadata_transpiler_service_port"
       ],
       "type": "integer"
     },
@@ -62,7 +23,7 @@
       "title": "Log Level",
       "default": "info",
       "env_names": [
-        "my_microservice_log_level"
+        "metadata_transpiler_service_log_level"
       ],
       "enum": [
         "critical",
@@ -78,7 +39,7 @@
       "title": "Auto Reload",
       "default": false,
       "env_names": [
-        "my_microservice_auto_reload"
+        "metadata_transpiler_service_auto_reload"
       ],
       "type": "boolean"
     },
@@ -86,7 +47,7 @@
       "title": "Workers",
       "default": 1,
       "env_names": [
-        "my_microservice_workers"
+        "metadata_transpiler_service_workers"
       ],
       "type": "integer"
     },
@@ -94,7 +55,7 @@
       "title": "Api Root Path",
       "default": "/",
       "env_names": [
-        "my_microservice_api_root_path"
+        "metadata_transpiler_service_api_root_path"
       ],
       "type": "string"
     },
@@ -102,7 +63,7 @@
       "title": "Openapi Url",
       "default": "/openapi.json",
       "env_names": [
-        "my_microservice_openapi_url"
+        "metadata_transpiler_service_openapi_url"
       ],
       "type": "string"
     },
@@ -110,14 +71,14 @@
       "title": "Docs Url",
       "default": "/docs",
       "env_names": [
-        "my_microservice_docs_url"
+        "metadata_transpiler_service_docs_url"
       ],
       "type": "string"
     },
     "cors_allowed_origins": {
       "title": "Cors Allowed Origins",
       "env_names": [
-        "my_microservice_cors_allowed_origins"
+        "metadata_transpiler_service_cors_allowed_origins"
       ],
       "type": "array",
       "items": {
@@ -127,14 +88,14 @@
     "cors_allow_credentials": {
       "title": "Cors Allow Credentials",
       "env_names": [
-        "my_microservice_cors_allow_credentials"
+        "metadata_transpiler_service_cors_allow_credentials"
       ],
       "type": "boolean"
     },
     "cors_allowed_methods": {
       "title": "Cors Allowed Methods",
       "env_names": [
-        "my_microservice_cors_allowed_methods"
+        "metadata_transpiler_service_cors_allowed_methods"
       ],
       "type": "array",
       "items": {
@@ -144,33 +105,13 @@
     "cors_allowed_headers": {
       "title": "Cors Allowed Headers",
       "env_names": [
-        "my_microservice_cors_allowed_headers"
+        "metadata_transpiler_service_cors_allowed_headers"
       ],
       "type": "array",
       "items": {
         "type": "string"
       }
-    },
-    "language": {
-      "title": "Language",
-      "default": "Croatian",
-      "env_names": [
-        "my_microservice_language"
-      ],
-      "enum": [
-        "Greek",
-        "Croatian",
-        "French",
-        "German"
-      ],
-      "type": "string"
     }
   },
-  "required": [
-    "s3_endpoint_url",
-    "s3_access_key_id",
-    "s3_secret_access_key",
-    "db_url"
-  ],
   "additionalProperties": false
 }
