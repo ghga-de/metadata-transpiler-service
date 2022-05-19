@@ -1627,16 +1627,12 @@ components:
           description: Information about a Project entity associated with this submission.
           title: Has Project
         has_protocol:
-          anyOf:
-            - $ref: '#/components/schemas/CreateSequencingProtocol'
-            - $ref: '#/components/schemas/CreateLibraryPreparationProtocol'
-          discriminator:
-            propertyName: schema_type
           description: One or more Protocol entities associated with this Submission.
           items:
             anyOf:
-            - $ref: '#/components/schemas/CreateSequencingProtocol'
-            - $ref: '#/components/schemas/CreateLibraryPreparationProtocol'
+            - anyOf:
+              - $ref: '#/components/schemas/CreateLibraryPreparationProtocol'
+              - $ref: '#/components/schemas/CreateSequencingProtocol'
             - type: string
           title: Has Protocol
           type: array
