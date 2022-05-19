@@ -868,7 +868,7 @@ class CreateSubmission(BaseModel):
     ] = Field(
         None,
         description="""One or more Protocol entities associated with this Submission.""",
-        descriminator="scheme_type",
+        descriminator="schema_type",
     )
     has_analysis: Optional[Union[List[CreateAnalysis], List[str]]] = Field(
         None,
