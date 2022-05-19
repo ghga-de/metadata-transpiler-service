@@ -4,6 +4,6 @@ port: 8080
 log_level: info
 workers: 1
 auto_reload: true
-auto_root_path: "/"
+api_root_path: "/"
 openapi_url: "/openapi.json"
 docs_url: "/docs"
