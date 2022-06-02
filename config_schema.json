@@ -146,11 +146,11 @@
     },
     "schema_version": {
       "title": "Schema Version",
-      "default": 0.7,
+      "default": "0.7.0",
       "env_names": [
         "metadata_transpiler_service_schema_version"
       ],
-      "type": "number"
+      "type": "string"
     }
   },
   "additionalProperties": false

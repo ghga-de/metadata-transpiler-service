@@ -9,7 +9,6 @@ host: 127.0.0.1
 log_level: info
 openapi_url: /openapi.json
 port: 8080
-schema_version: 0.7
+schema_version: 0.7.0
 service_name: metadata_transpiler_service
 workers: 1
-
