@@ -22,6 +22,8 @@ from typing import IO, Dict, List, Union
 import pandas as pd
 from pandas import DataFrame
 
+from metadata_transpiler_service.mapping import HEADER, INDEX_COL, SKIP_ROWS
+
 TMP_FILE = "tmp_file.xlsx"
 
 
@@ -39,9 +41,9 @@ async def read_submission_sheets(
     sheets = pd.read_excel(
         io=TMP_FILE,
         sheet_name=sheet_names,
-        skiprows=list(range(2, 5)),
-        header=1,
-        index_col=0,
+        skiprows=SKIP_ROWS,
+        header=HEADER,
+        index_col=INDEX_COL,
         keep_default_na=False,
         dtype=str,
     )

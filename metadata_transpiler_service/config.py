@@ -19,13 +19,12 @@ from ghga_service_chassis_lib.api import ApiConfigBase
 from ghga_service_chassis_lib.config import config_from_yaml
 
 
-# Please adapt config prefix and remove unnecessary config bases:
 @config_from_yaml(prefix="metadata_transpiler_service")
 class Config(ApiConfigBase):
     """Config parameters and their defaults."""
 
     service_name: str = "metadata_transpiler_service"
-    schema_version = 0.7
+    schema_version = "0.7.0"
 
 
 CONFIG = Config()

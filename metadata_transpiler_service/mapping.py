@@ -19,6 +19,10 @@ Mapping for transpiler.
 
 from typing import Any, Dict
 
+SKIP_ROWS = list(range(2, 5))
+HEADER = 1
+INDEX_COL = 0
+
 submission_map: Dict[str, Any] = {
     "Core_Submission_Sheet": {
         "has_project": {

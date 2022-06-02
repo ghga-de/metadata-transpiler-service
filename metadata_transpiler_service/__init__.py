@@ -13,6 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""A service for converting Spreadsheet to JSON Format"""  # Please adapt to package
+"""Metadata Transpiler Service"""
 
 __version__ = "0.1.0"

@@ -26,7 +26,6 @@ import sys
 
 import yaml
 
-# Please adapt to package name:
 from metadata_transpiler_service.api.main import app
 
 # get openapi spec as dict:
