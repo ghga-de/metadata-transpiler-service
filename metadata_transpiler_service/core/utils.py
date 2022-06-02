@@ -13,19 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Test the api module"""
+"""
+Module containing the utils for convertion.
+"""
 
-from fastapi import status
-from fastapi.testclient import TestClient
-
-from metadata_transpiler_service.api.main import app
+from typing import Dict, Union
 
 
-def test_index():
-    """Test the index endpoint"""
-
-    client = TestClient(app)
-    response = client.get("/")
-
-    assert response.status_code == status.HTTP_200_OK
-    assert response.text == '"Index of the GHGA Metadata Transpiler Service"'
+async def map_to(field: str, mapping_scheme: Dict) -> Union[str, None]:
+    """Returns the field name in spreadsheet which contains data entered
+    for a field in submission"""
+    if field not in mapping_scheme:
+        return None
+    return mapping_scheme[field]
