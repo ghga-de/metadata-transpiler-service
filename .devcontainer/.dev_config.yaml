@@ -1,8 +1,9 @@
 # Please only mention the non-default settings here:
-
-db_url: postgresql://postgres:postgres@postgres/postgres
-s3_endpoint_url: http://localstack:4566
-s3_access_key_id: test
-s3_secret_access_key: test
-
-language: Greek
+host: 127.0.0.1
+port: 8080
+log_level: info
+workers: 1
+auto_reload: true
+api_root_path: "/"
+openapi_url: "/openapi.json"
+docs_url: "/docs"

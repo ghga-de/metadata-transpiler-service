@@ -23,8 +23,7 @@ from .config import CONFIG, Config
 
 def run(config: Config = CONFIG):
     """Run the service"""
-    # Please adapt to package name
-    run_server(app="my_microservice.__main__:app", config=config)
+    run_server(app="metadata_transpiler_service.__main__:app", config=config)
 
 
 if __name__ == "__main__":
