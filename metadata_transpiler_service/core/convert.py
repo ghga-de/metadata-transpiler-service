@@ -26,12 +26,11 @@ from metadata_transpiler_service.core.schema import get_schema, is_array, is_enu
 from metadata_transpiler_service.core.utils import map_to
 from metadata_transpiler_service.creation_models import CreateSubmission
 from metadata_transpiler_service.dao.utils import read_value
-from metadata_transpiler_service.mapping import submission_map
 
 SCHEMA_VERSION = CONFIG.schema_version
 
 
-async def generate_json_from(submission_sheets: Dict):
+async def generate_json_from(submission_sheets: Dict, submission_map: Dict):
     """Generate a submission JSON from the provided spreadsheet (multiple sheets)"""
 
     submission_object: Dict[str, Any] = {}

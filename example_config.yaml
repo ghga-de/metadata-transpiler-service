@@ -7,9 +7,9 @@ cors_allowed_origins: null
 docs_url: /docs
 host: 127.0.0.1
 log_level: info
+mapping_url: /data/mapping.json
 openapi_url: /openapi.json
 port: 8080
 schema_version: 0.7.0
 service_name: metadata_transpiler_service
 workers: 1
-

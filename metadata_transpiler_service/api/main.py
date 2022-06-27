@@ -28,8 +28,10 @@ from ghga_service_chassis_lib.api import configure_app
 from metadata_transpiler_service.config import CONFIG
 from metadata_transpiler_service.core.convert import generate_json_from
 from metadata_transpiler_service.creation_models import CreateSubmission
-from metadata_transpiler_service.dao.utils import read_submission_sheets
-from metadata_transpiler_service.mapping import submission_map
+from metadata_transpiler_service.dao.utils import (
+    read_mapping_file,
+    read_submission_sheets,
+)
 
 app = FastAPI()
 configure_app(app, config=CONFIG)
@@ -49,6 +51,7 @@ async def index():
 async def convert_xlsx_to_json(file: UploadFile = File(...)):
     """Convert the uploaded spreadsheet into JSON according to the CreateSubmission model"""
 
+    submission_map = await read_mapping_file()
     sheet_names = list(submission_map.keys())
     temp_file: Union[SpooledTemporaryFile, IO] = file.file
 
@@ -60,6 +63,6 @@ async def convert_xlsx_to_json(file: UploadFile = File(...)):
             detail=(f"Cannot read the input file '{file.filename}': " f"{exp}"),
         ) from exp
 
-    submission_json = await generate_json_from(submission_sheets)
+    submission_json = await generate_json_from(submission_sheets, submission_map)
 
     return submission_json
