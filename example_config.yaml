@@ -13,3 +13,4 @@ port: 8080
 schema_version: 0.7.0
 service_name: metadata_transpiler_service
 workers: 1
+

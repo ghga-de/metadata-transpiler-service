@@ -153,7 +153,7 @@
       "type": "string"
     },
     "mapping_url": {
-      "title": "Mapping JSON Url",
+      "title": "Mapping Url",
       "default": "/data/mapping.json",
       "env_names": [
         "metadata_transpiler_service_mapping_url"
