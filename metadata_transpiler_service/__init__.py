@@ -16,3 +16,7 @@
 """Metadata Transpiler Service"""
 
 __version__ = "0.1.0"
+
+from pathlib import Path
+
+BASE_DIR = Path(__file__).parent.parent.resolve()

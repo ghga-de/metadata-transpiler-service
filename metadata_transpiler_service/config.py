@@ -24,7 +24,8 @@ class Config(ApiConfigBase):
     """Config parameters and their defaults."""
 
     service_name: str = "metadata_transpiler_service"
-    schema_version = "0.7.0"
+    schema_version: str = "0.7.0"
+    mapping_url: str = "/data/mapping.json"
 
 
 CONFIG = Config()
