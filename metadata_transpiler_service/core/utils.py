@@ -17,7 +17,7 @@
 Module containing the utils for convertion.
 """
 
-from typing import Dict, Union
+from typing import Dict, List, Union
 
 
 async def map_to(field: str, mapping_scheme: Dict) -> Union[str, None]:
@@ -26,3 +26,45 @@ async def map_to(field: str, mapping_scheme: Dict) -> Union[str, None]:
     if field not in mapping_scheme:
         return None
     return mapping_scheme[field]
+
+
+async def add_unique(list1: List, list2: List) -> List:
+    """Add only unique elements to the list
+
+    Args:
+        list1 (List): original list
+        list2 (List): list to be added
+
+    Returns:
+        List: concatenated list
+    """
+    for elem in list2:
+        if elem not in list1:
+            list1.append(elem)
+
+    return list1
+
+
+async def exists_in(alias: str, embedded_list: List) -> bool:
+    """Check if an object is already in the list
+
+    Args:
+        alias (str): alias of the object to check
+        embedded_list (List): the list of objects
+
+    Returns:
+        bool: true, if the object is already in the list, otherwise false
+    """
+    hits = [x for x in embedded_list if x["alias"] == alias]
+
+    if len(hits) != 0:
+        return True
+
+    return False
+
+
+async def create_list(input_object: object) -> List:
+    """Transform object to list, if it is not a list already"""
+    if isinstance(input_object, list):
+        return input_object
+    return [input_object]
