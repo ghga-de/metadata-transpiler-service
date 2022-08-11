@@ -95,7 +95,8 @@ components:
           title: Name
           type: string
         schema_type:
-          description: The schema type an instance corresponds to.
+          enum:
+          - CreateAgent
           title: Schema Type
           type: string
         schema_version:
@@ -108,6 +109,8 @@ components:
             type: string
           title: Xref
           type: array
+      required:
+      - schema_type
       title: CreateAgent
       type: object
     CreateAnalysis:
@@ -193,7 +196,8 @@ components:
           title: Reference Genome
           type: string
         schema_type:
-          description: The schema type an instance corresponds to.
+          enum:
+          - CreateAnalysis
           title: Schema Type
           type: string
         schema_version:
@@ -215,6 +219,8 @@ components:
             type: string
           title: Xref
           type: array
+      required:
+      - schema_type
       title: CreateAnalysis
       type: object
     CreateAnalysisProcess:
@@ -261,7 +267,8 @@ components:
           description: The Workflow entity associated with this Analysis Process.
           title: Has Workflow
         schema_type:
-          description: The schema type an instance corresponds to.
+          enum:
+          - CreateAnalysisProcess
           title: Schema Type
           type: string
         schema_version:
@@ -278,6 +285,8 @@ components:
             type: string
           title: Xref
           type: array
+      required:
+      - schema_type
       title: CreateAnalysisProcess
       type: object
     CreateAnatomicalEntity:
@@ -314,7 +323,8 @@ components:
           title: Ontology Version
           type: string
         schema_type:
-          description: The schema type an instance corresponds to.
+          enum:
+          - CreateAnatomicalEntity
           title: Schema Type
           type: string
         schema_version:
@@ -327,6 +337,8 @@ components:
             type: string
           title: Xref
           type: array
+      required:
+      - schema_type
       title: CreateAnatomicalEntity
       type: object
     CreateAncestry:
@@ -366,7 +378,8 @@ components:
           title: Ontology Version
           type: string
         schema_type:
-          description: The schema type an instance corresponds to.
+          enum:
+          - CreateAncestry
           title: Schema Type
           type: string
         schema_version:
@@ -379,6 +392,8 @@ components:
             type: string
           title: Xref
           type: array
+      required:
+      - schema_type
       title: CreateAncestry
       type: object
     CreateBiospecimen:
@@ -427,7 +442,9 @@ components:
           title: Has Disease
         has_individual:
           anyOf:
-          - $ref: '#/components/schemas/CreateIndividual'
+          - anyOf:
+            - $ref: '#/components/schemas/CreateDonor'
+            - $ref: '#/components/schemas/CreateIndividual'
           - type: string
           description: The Individual entity from which this Biospecimen was derived.
           title: Has Individual
@@ -453,7 +470,8 @@ components:
           title: Name
           type: string
         schema_type:
-          description: The schema type an instance corresponds to.
+          enum:
+          - CreateBiospecimen
           title: Schema Type
           type: string
         schema_version:
@@ -475,7 +493,436 @@ components:
             type: string
           title: Xref
           type: array
+      required:
+      - schema_type
       title: CreateBiospecimen
+      type: object
+    CreateDataAccessCommittee:
+      description: A group of members that are delegated to grant access to one or
+        more datasets after ensuring the minimum criteria for data sharing has been
+        met, and request for data use does not raise ethical and/or legal concerns.
+      properties:
+        accession:
+          description: A unique GHGA identifier assigned to an entity for the sole
+            purpose of referring to that entity in a global scope.
+          title: Accession
+          type: string
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
+        description:
+          description: A description for the Data Access Committee.
+          title: Description
+          type: string
+        ega_accession:
+          description: A unique European Genome-Phenome Archive (EGA) identifier assigned
+            to an entity for the sole purpose of referring to that entity within the
+            EGA federated network.
+          title: Ega Accession
+          type: string
+        has_attribute:
+          description: Key/value pairs corresponding to an entity.
+          items:
+            $ref: '#/components/schemas/Attribute'
+          title: Has Attribute
+          type: array
+        has_member:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CreateMember'
+            type: array
+          - items:
+              type: string
+            type: array
+          description: All the members that are part of this Data Access Committee.
+          title: Has Member
+        main_contact:
+          anyOf:
+          - $ref: '#/components/schemas/CreateMember'
+          - type: string
+          description: The main contact for the Data Access Committee.
+          title: Main Contact
+        name:
+          description: The name for the Data Access Committee.
+          title: Name
+          type: string
+        schema_type:
+          enum:
+          - CreateDataAccessCommittee
+          title: Schema Type
+          type: string
+        schema_version:
+          description: The version of the schema an instance corresponds to.
+          title: Schema Version
+          type: string
+        xref:
+          description: Database cross references for an entity.
+          items:
+            type: string
+          title: Xref
+          type: array
+      required:
+      - schema_type
+      title: CreateDataAccessCommittee
+      type: object
+    CreateDataAccessPolicy:
+      description: A Data Access Policy specifies under which circumstances, legal
+        or otherwise, a user can have access to one or more Datasets belonging to
+        one or more Studies.
+      properties:
+        accession:
+          description: A unique GHGA identifier assigned to an entity for the sole
+            purpose of referring to that entity in a global scope.
+          title: Accession
+          type: string
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
+        data_request_form:
+          description: Data Request Form that is associated with this Data Access
+            Policy.
+          title: Data Request Form
+          type: string
+        description:
+          description: A short description for the Data Access Policy.
+          title: Description
+          type: string
+        ega_accession:
+          description: A unique European Genome-Phenome Archive (EGA) identifier assigned
+            to an entity for the sole purpose of referring to that entity within the
+            EGA federated network.
+          title: Ega Accession
+          type: string
+        has_attribute:
+          description: Key/value pairs corresponding to an entity.
+          items:
+            $ref: '#/components/schemas/Attribute'
+          title: Has Attribute
+          type: array
+        has_data_access_committee:
+          anyOf:
+          - $ref: '#/components/schemas/CreateDataAccessCommittee'
+          - type: string
+          description: The Data Access Committee linked to this policy.
+          title: Has Data Access Committee
+        has_data_use_condition:
+          description: Data Use Condition entities that are associated with the Data
+            Access Policy.
+          items:
+            $ref: '#/components/schemas/CreateDataUseCondition'
+          title: Has Data Use Condition
+          type: array
+        name:
+          description: A name for the Data Access Policy.
+          title: Name
+          type: string
+        policy_text:
+          description: The terms of data use and policy verbiage should be captured
+            here.
+          title: Policy Text
+          type: string
+        policy_url:
+          description: URL for the policy, if available. This is useful if the terms
+            of the policy is made available online at a resolvable URL.
+          title: Policy Url
+          type: string
+        schema_type:
+          enum:
+          - CreateDataAccessPolicy
+          title: Schema Type
+          type: string
+        schema_version:
+          description: The version of the schema an instance corresponds to.
+          title: Schema Version
+          type: string
+        xref:
+          description: Database cross references for an entity.
+          items:
+            type: string
+          title: Xref
+          type: array
+      required:
+      - schema_type
+      title: CreateDataAccessPolicy
+      type: object
+    CreateDataUseCondition:
+      description: Data Use Condition represents the use conditions associated with
+        a policy.
+      properties:
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
+        has_data_use_modifier:
+          anyOf:
+          - $ref: '#/components/schemas/CreateDataUseModifier'
+          - type: string
+          description: Modifier for Data use permission associated with a policy.
+            Should be descendants of 'DUO:0000017 data use modifier'
+          title: Has Data Use Modifier
+        has_data_use_permission:
+          anyOf:
+          - $ref: '#/components/schemas/CreateDataUsePermission'
+          - type: string
+          description: Data use permission associated with a policy. Typically one
+            or more terms from DUO and should be descendants of 'DUO:0000001 data
+            use permission'.
+          title: Has Data Use Permission
+        schema_type:
+          enum:
+          - CreateDataUseCondition
+          title: Schema Type
+          type: string
+        schema_version:
+          description: The version of the schema an instance corresponds to.
+          title: Schema Version
+          type: string
+        xref:
+          description: Database cross references for an entity.
+          items:
+            type: string
+          title: Xref
+          type: array
+      required:
+      - schema_type
+      title: CreateDataUseCondition
+      type: object
+    CreateDataUseModifier:
+      description: Data use modifiers indicate additional conditions for use.
+      properties:
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
+        concept_identifier:
+          description: The Compact URI (CURIE) that uniquely identifies a concept
+            from an ontology, thesaurus, or terminology.
+          title: Concept Identifier
+          type: string
+        concept_name:
+          description: The name or label (typically, rdfs:label) of concept from an
+            ontology, thesaurus, or terminology.
+          title: Concept Name
+          type: string
+        description:
+          description: Description of an entity.
+          title: Description
+          type: string
+        ontology_name:
+          description: The name of the ontology from which this ontology class was
+            chosen.
+          title: Ontology Name
+          type: string
+        ontology_version:
+          description: The version of the ontology from which this ontology class
+            was chosen.
+          title: Ontology Version
+          type: string
+        schema_type:
+          enum:
+          - CreateDataUseModifier
+          title: Schema Type
+          type: string
+        schema_version:
+          description: The version of the schema an instance corresponds to.
+          title: Schema Version
+          type: string
+        xref:
+          description: Database cross references for an entity.
+          items:
+            type: string
+          title: Xref
+          type: array
+      required:
+      - schema_type
+      title: CreateDataUseModifier
+      type: object
+    CreateDataUsePermission:
+      description: A data item that is used to indicate consent permissions for datasets
+        and/or materials and relates to the purposes for which datasets and/or material
+        might be removed, stored or used.
+      properties:
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
+        concept_identifier:
+          description: The Compact URI (CURIE) that uniquely identifies a concept
+            from an ontology, thesaurus, or terminology.
+          title: Concept Identifier
+          type: string
+        concept_name:
+          description: The name or label (typically, rdfs:label) of concept from an
+            ontology, thesaurus, or terminology.
+          title: Concept Name
+          type: string
+        description:
+          description: Description of an entity.
+          title: Description
+          type: string
+        ontology_name:
+          description: The name of the ontology from which this ontology class was
+            chosen.
+          title: Ontology Name
+          type: string
+        ontology_version:
+          description: The version of the ontology from which this ontology class
+            was chosen.
+          title: Ontology Version
+          type: string
+        schema_type:
+          enum:
+          - CreateDataUsePermission
+          title: Schema Type
+          type: string
+        schema_version:
+          description: The version of the schema an instance corresponds to.
+          title: Schema Version
+          type: string
+        xref:
+          description: Database cross references for an entity.
+          items:
+            type: string
+          title: Xref
+          type: array
+      required:
+      - schema_type
+      title: CreateDataUsePermission
+      type: object
+    CreateDataset:
+      description: A Dataset is a collection of Files that is prepared for distribution
+        and is tied to a Data Access Policy.
+      properties:
+        accession:
+          description: A unique GHGA identifier assigned to an entity for the sole
+            purpose of referring to that entity in a global scope.
+          title: Accession
+          type: string
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
+        description:
+          description: Description of an entity.
+          title: Description
+          type: string
+        ega_accession:
+          description: A unique European Genome-Phenome Archive (EGA) identifier assigned
+            to an entity for the sole purpose of referring to that entity within the
+            EGA federated network.
+          title: Ega Accession
+          type: string
+        has_analysis:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CreateAnalysis'
+            type: array
+          - items:
+              type: string
+            type: array
+          description: One or more Analysis entities that are referenced by this Dataset.
+          title: Has Analysis
+        has_attribute:
+          description: Key/value pairs corresponding to an entity.
+          items:
+            $ref: '#/components/schemas/Attribute'
+          title: Has Attribute
+          type: array
+        has_data_access_policy:
+          anyOf:
+          - $ref: '#/components/schemas/CreateDataAccessPolicy'
+          - type: string
+          description: The Data Access Policy that applies to this Dataset.
+          title: Has Data Access Policy
+        has_experiment:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CreateExperiment'
+            type: array
+          - items:
+              type: string
+            type: array
+          description: One or more Experiment entities that are referenced by this
+            Dataset.
+          title: Has Experiment
+        has_file:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CreateFile'
+            type: array
+          - items:
+              type: string
+            type: array
+          description: One or more File entities that collectively are part of this
+            Dataset.
+          title: Has File
+        has_publication:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CreatePublication'
+            type: array
+          - items:
+              type: string
+            type: array
+          description: One or more Publication entities associated with this Dataset.
+          title: Has Publication
+        has_sample:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CreateSample'
+            type: array
+          - items:
+              type: string
+            type: array
+          description: One or more Sample entities that are referenced by this Dataset.
+          title: Has Sample
+        has_study:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CreateStudy'
+            type: array
+          - items:
+              type: string
+            type: array
+          description: One or more Study entities that are referenced by this Dataset.
+          title: Has Study
+        release_date:
+          description: The timestamp (in ISO 8601 format) when the entity was released
+            for public consumption.
+          title: Release Date
+          type: string
+        release_status:
+          allOf:
+          - $ref: '#/components/schemas/ReleaseStatusEnum'
+          description: The release status of a Dataset.
+        schema_type:
+          enum:
+          - CreateDataset
+          title: Schema Type
+          type: string
+        schema_version:
+          description: The version of the schema an instance corresponds to.
+          title: Schema Version
+          type: string
+        title:
+          description: A title for the submitted Dataset.
+          title: Title
+          type: string
+        type:
+          description: The type of an entity.
+          title: Type
+          type: string
+        xref:
+          description: Database cross references for an entity.
+          items:
+            type: string
+          title: Xref
+          type: array
+      required:
+      - schema_type
+      title: CreateDataset
       type: object
     CreateDisease:
       description: A disease is a disposition to undergo pathological processes that
@@ -510,7 +957,8 @@ components:
           title: Ontology Version
           type: string
         schema_type:
-          description: The schema type an instance corresponds to.
+          enum:
+          - CreateDisease
           title: Schema Type
           type: string
         schema_version:
@@ -523,7 +971,160 @@ components:
             type: string
           title: Xref
           type: array
+      required:
+      - schema_type
       title: CreateDisease
+      type: object
+    CreateDonor:
+      description: A Donor is an Individual that participates in a research Study
+        by donating a Biospecimen. The use of the Biospecimen is restricted to the
+        consent provided by the Donor.
+      properties:
+        accession:
+          description: A unique GHGA identifier assigned to an entity for the sole
+            purpose of referring to that entity in a global scope.
+          title: Accession
+          type: string
+        additional_name:
+          description: Additional name(s).
+          title: Additional Name
+          type: string
+        age:
+          allOf:
+          - $ref: '#/components/schemas/AgeRangeEnum'
+          description: Age of an individual.
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
+        ega_accession:
+          description: A unique European Genome-Phenome Archive (EGA) identifier assigned
+            to an entity for the sole purpose of referring to that entity within the
+            EGA federated network.
+          title: Ega Accession
+          type: string
+        family_name:
+          description: Last name.
+          title: Family Name
+          type: string
+        geographical_region:
+          description: The geographical region where the Individual is located. Any
+            demarcated area of the Earth; may be determined by both natural and human
+            boundaries.
+          title: Geographical Region
+          type: string
+        given_name:
+          description: First name.
+          title: Given Name
+          type: string
+        has_ancestry:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CreateAncestry'
+            type: array
+          - items:
+              type: string
+            type: array
+          description: A person's descent or lineage, from a person or from a population.
+            Typically this is a value from HANCESTRO (Human Ancestry Ontology).
+          title: Has Ancestry
+        has_children:
+          anyOf:
+          - items:
+              anyOf:
+              - $ref: '#/components/schemas/CreateDonor'
+              - $ref: '#/components/schemas/CreateIndividual'
+              discriminator:
+                mapping:
+                  CreateDonor: '#/components/schemas/CreateDonor'
+                  CreateIndividual: '#/components/schemas/CreateIndividual'
+                propertyName: schema_type
+            type: array
+          - items:
+              type: string
+            type: array
+          description: The children of an entity.
+          title: Has Children
+        has_disease:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CreateDisease'
+            type: array
+          - items:
+              type: string
+            type: array
+          description: Disease concept that the entity is associated with.
+          title: Has Disease
+        has_file:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CreateFile'
+            type: array
+          - items:
+              type: string
+            type: array
+          description: The file associated with an entity.
+          title: Has File
+        has_parent:
+          anyOf:
+          - items:
+              anyOf:
+              - $ref: '#/components/schemas/CreateDonor'
+              - $ref: '#/components/schemas/CreateIndividual'
+              discriminator:
+                mapping:
+                  CreateDonor: '#/components/schemas/CreateDonor'
+                  CreateIndividual: '#/components/schemas/CreateIndividual'
+                propertyName: schema_type
+            type: array
+          - items:
+              type: string
+            type: array
+          description: The parent of an entity.
+          title: Has Parent
+        has_phenotypic_feature:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CreatePhenotypicFeature'
+            type: array
+          - items:
+              type: string
+            type: array
+          description: Phenotypic feature concept that the entity is associated with.
+          title: Has Phenotypic Feature
+        karyotype:
+          description: The karyotype of an individual if defined.
+          title: Karyotype
+          type: string
+        schema_type:
+          enum:
+          - CreateDonor
+          title: Schema Type
+          type: string
+        schema_version:
+          description: The version of the schema an instance corresponds to.
+          title: Schema Version
+          type: string
+        sex:
+          allOf:
+          - $ref: '#/components/schemas/BiologicalSexEnum'
+          description: The assemblage of physical properties or qualities by which
+            male is distinguished from female; the physical difference between male
+            and female; the distinguishing peculiarity of male or female.
+        vital_status:
+          allOf:
+          - $ref: '#/components/schemas/VitalStatusEnum'
+          description: The state or condition of being living or deceased; also includes
+            the case where the vital status is unknown.
+        xref:
+          description: Database cross references for an entity.
+          items:
+            type: string
+          title: Xref
+          type: array
+      required:
+      - schema_type
+      title: CreateDonor
       type: object
     CreateExperiment:
       description: An experiment is an investigation that consists of a coordinated
@@ -590,7 +1191,16 @@ components:
         has_protocol:
           anyOf:
           - items:
-              $ref: '#/components/schemas/CreateProtocol'
+              anyOf:
+              - $ref: '#/components/schemas/CreateSequencingProtocol'
+              - $ref: '#/components/schemas/CreateLibraryPreparationProtocol'
+              - $ref: '#/components/schemas/CreateProtocol'
+              discriminator:
+                mapping:
+                  CreateLibraryPreparationProtocol: '#/components/schemas/CreateLibraryPreparationProtocol'
+                  CreateProtocol: '#/components/schemas/CreateProtocol'
+                  CreateSequencingProtocol: '#/components/schemas/CreateSequencingProtocol'
+                propertyName: schema_type
             type: array
           - items:
               type: string
@@ -614,7 +1224,8 @@ components:
           description: The Study entity associated with this Experiment.
           title: Has Study
         schema_type:
-          description: The schema type an instance corresponds to.
+          enum:
+          - CreateExperiment
           title: Schema Type
           type: string
         schema_version:
@@ -641,6 +1252,8 @@ components:
             type: string
           title: Xref
           type: array
+      required:
+      - schema_type
       title: CreateExperiment
       type: object
     CreateExperimentProcess:
@@ -683,12 +1296,16 @@ components:
           title: Has Output
         has_protocol:
           anyOf:
-          - $ref: '#/components/schemas/CreateProtocol'
+          - anyOf:
+            - $ref: '#/components/schemas/CreateSequencingProtocol'
+            - $ref: '#/components/schemas/CreateLibraryPreparationProtocol'
+            - $ref: '#/components/schemas/CreateProtocol'
           - type: string
           description: The Protocol entity used by this Experiment Process.
           title: Has Protocol
         schema_type:
-          description: The schema type an instance corresponds to.
+          enum:
+          - CreateExperimentProcess
           title: Schema Type
           type: string
         schema_version:
@@ -712,6 +1329,8 @@ components:
             type: string
           title: Xref
           type: array
+      required:
+      - schema_type
       title: CreateExperimentProcess
       type: object
     CreateFile:
@@ -765,7 +1384,8 @@ components:
           title: Name
           type: string
         schema_type:
-          description: The schema type an instance corresponds to.
+          enum:
+          - CreateFile
           title: Schema Type
           type: string
         schema_version:
@@ -782,6 +1402,8 @@ components:
             type: string
           title: Xref
           type: array
+      required:
+      - schema_type
       title: CreateFile
       type: object
     CreateIndividual:
@@ -838,7 +1460,14 @@ components:
         has_children:
           anyOf:
           - items:
-              $ref: '#/components/schemas/CreateIndividual'
+              anyOf:
+              - $ref: '#/components/schemas/CreateDonor'
+              - $ref: '#/components/schemas/CreateIndividual'
+              discriminator:
+                mapping:
+                  CreateDonor: '#/components/schemas/CreateDonor'
+                  CreateIndividual: '#/components/schemas/CreateIndividual'
+                propertyName: schema_type
             type: array
           - items:
               type: string
@@ -873,7 +1502,14 @@ components:
         has_parent:
           anyOf:
           - items:
-              $ref: '#/components/schemas/CreateIndividual'
+              anyOf:
+              - $ref: '#/components/schemas/CreateDonor'
+              - $ref: '#/components/schemas/CreateIndividual'
+              discriminator:
+                mapping:
+                  CreateDonor: '#/components/schemas/CreateDonor'
+                  CreateIndividual: '#/components/schemas/CreateIndividual'
+                propertyName: schema_type
             type: array
           - items:
               type: string
@@ -899,7 +1535,8 @@ components:
           title: Karyotype
           type: string
         schema_type:
-          description: The schema type an instance corresponds to.
+          enum:
+          - CreateIndividual
           title: Schema Type
           type: string
         schema_version:
@@ -922,6 +1559,8 @@ components:
             type: string
           title: Xref
           type: array
+      required:
+      - schema_type
       title: CreateIndividual
       type: object
     CreateLibraryPreparationProtocol:
@@ -1039,6 +1678,56 @@ components:
       - schema_type
       title: CreateLibraryPreparationProtocol
       type: object
+    CreateMember:
+      description: Member of an Organization or a Committee.
+      properties:
+        additional_name:
+          description: Additional name(s).
+          title: Additional Name
+          type: string
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
+        email:
+          description: The email of the Member.
+          title: Email
+          type: string
+        family_name:
+          description: Last name.
+          title: Family Name
+          type: string
+        given_name:
+          description: First name.
+          title: Given Name
+          type: string
+        organization:
+          description: The organization that the Member is part of.
+          title: Organization
+          type: string
+        schema_type:
+          enum:
+          - CreateMember
+          title: Schema Type
+          type: string
+        schema_version:
+          description: The version of the schema an instance corresponds to.
+          title: Schema Version
+          type: string
+        telephone:
+          description: The telephone number of the Member.
+          title: Telephone
+          type: string
+        xref:
+          description: Database cross references for an entity.
+          items:
+            type: string
+          title: Xref
+          type: array
+      required:
+      - schema_type
+      title: CreateMember
+      type: object
     CreatePhenotypicFeature:
       description: The observable form taken by some character (or group of characters)
         in an individual or an organism, excluding pathology and disease. The detectable
@@ -1073,7 +1762,8 @@ components:
           title: Ontology Version
           type: string
         schema_type:
-          description: The schema type an instance corresponds to.
+          enum:
+          - CreatePhenotypicFeature
           title: Schema Type
           type: string
         schema_version:
@@ -1086,6 +1776,8 @@ components:
             type: string
           title: Xref
           type: array
+      required:
+      - schema_type
       title: CreatePhenotypicFeature
       type: object
     CreateProject:
@@ -1113,7 +1805,8 @@ components:
           title: Has Attribute
           type: array
         schema_type:
-          description: The schema type an instance corresponds to.
+          enum:
+          - CreateProject
           title: Schema Type
           type: string
         schema_version:
@@ -1130,6 +1823,8 @@ components:
             type: string
           title: Xref
           type: array
+      required:
+      - schema_type
       title: CreateProject
       type: object
     CreateProtocol:
@@ -1163,7 +1858,8 @@ components:
           title: Name
           type: string
         schema_type:
-          description: The schema type an instance corresponds to.
+          enum:
+          - CreateProtocol
           title: Schema Type
           type: string
         schema_version:
@@ -1185,6 +1881,8 @@ components:
             type: string
           title: Xref
           type: array
+      required:
+      - schema_type
       title: CreateProtocol
       type: object
     CreatePublication:
@@ -1202,7 +1900,8 @@ components:
           title: Alias
           type: string
         schema_type:
-          description: The schema type an instance corresponds to.
+          enum:
+          - CreatePublication
           title: Schema Type
           type: string
         schema_version:
@@ -1219,6 +1918,8 @@ components:
             type: string
           title: Xref
           type: array
+      required:
+      - schema_type
       title: CreatePublication
       type: object
     CreateSample:
@@ -1276,7 +1977,9 @@ components:
           title: Has Biospecimen
         has_individual:
           anyOf:
-          - $ref: '#/components/schemas/CreateIndividual'
+          - anyOf:
+            - $ref: '#/components/schemas/CreateDonor'
+            - $ref: '#/components/schemas/CreateIndividual'
           - type: string
           description: The Individual from which this Sample was derived from.
           title: Has Individual
@@ -1290,7 +1993,8 @@ components:
           title: Name
           type: string
         schema_type:
-          description: The schema type an instance corresponds to.
+          enum:
+          - CreateSample
           title: Schema Type
           type: string
         schema_version:
@@ -1318,6 +2022,8 @@ components:
             type: string
           title: Xref
           type: array
+      required:
+      - schema_type
       title: CreateSample
       type: object
     CreateSequencingProtocol:
@@ -1358,6 +2064,12 @@ components:
             column of sheath fluid in the flow cell.
           title: Flow Cell Type
           type: string
+        forward_or_reverse:
+          allOf:
+          - $ref: '#/components/schemas/ForwardOrReverseEnum'
+          description: Denotes whether a submitted FASTQ file contains forward (R1)
+            or reverse (R2) reads for paired-end sequencing. The number that identifies
+            each read direction in a paired-end nucleotide sequencing reaction.
         has_attribute:
           description: One or more attributes that further characterizes this Sequencing
             Protocol.
@@ -1532,7 +2244,8 @@ components:
           - $ref: '#/components/schemas/ReleaseStatusEnum'
           description: The release status of a Study.
         schema_type:
-          description: The schema type an instance corresponds to.
+          enum:
+          - CreateStudy
           title: Schema Type
           type: string
         schema_version:
@@ -1554,6 +2267,8 @@ components:
             type: string
           title: Xref
           type: array
+      required:
+      - schema_type
       title: CreateStudy
       type: object
     CreateSubmission:
@@ -1587,6 +2302,36 @@ components:
           description: Information about one or more Biospecimen entities associated
             with this submission.
           title: Has Biospecimen
+        has_data_access_committee:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CreateDataAccessCommittee'
+            type: array
+          - items:
+              type: string
+            type: array
+          description: The Data Access Committee that applies to Dataset in this submission.
+          title: Has Data Access Committee
+        has_data_access_policy:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CreateDataAccessPolicy'
+            type: array
+          - items:
+              type: string
+            type: array
+          description: The Data Access Policy that applies to Dataset in this submission.
+          title: Has Data Access Policy
+        has_dataset:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CreateDataset'
+            type: array
+          - items:
+              type: string
+            type: array
+          description: One or more Dataset that are part of this submission.
+          title: Has Dataset
         has_experiment:
           anyOf:
           - items:
@@ -1612,7 +2357,14 @@ components:
         has_individual:
           anyOf:
           - items:
-              $ref: '#/components/schemas/CreateIndividual'
+              anyOf:
+              - $ref: '#/components/schemas/CreateDonor'
+              - $ref: '#/components/schemas/CreateIndividual'
+              discriminator:
+                mapping:
+                  CreateDonor: '#/components/schemas/CreateDonor'
+                  CreateIndividual: '#/components/schemas/CreateIndividual'
+                propertyName: schema_type
             type: array
           - items:
               type: string
@@ -1620,6 +2372,17 @@ components:
           description: Information about one or more Individual entities associated
             with this submission.
           title: Has Individual
+        has_member:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CreateMember'
+            type: array
+          - items:
+              type: string
+            type: array
+          description: One or more member that are part of the Data Access Committee
+            referenced in this submission.
+          title: Has Member
         has_project:
           anyOf:
           - $ref: '#/components/schemas/CreateProject'
@@ -1627,15 +2390,24 @@ components:
           description: Information about a Project entity associated with this submission.
           title: Has Project
         has_protocol:
-          description: One or more Protocol entities associated with this Submission.
-          items:
-            anyOf:
-            - anyOf:
-              - $ref: '#/components/schemas/CreateLibraryPreparationProtocol'
+          anyOf:
+          - items:
+              anyOf:
               - $ref: '#/components/schemas/CreateSequencingProtocol'
-            - type: string
+              - $ref: '#/components/schemas/CreateLibraryPreparationProtocol'
+              - $ref: '#/components/schemas/CreateProtocol'
+              discriminator:
+                mapping:
+                  CreateLibraryPreparationProtocol: '#/components/schemas/CreateLibraryPreparationProtocol'
+                  CreateProtocol: '#/components/schemas/CreateProtocol'
+                  CreateSequencingProtocol: '#/components/schemas/CreateSequencingProtocol'
+                propertyName: schema_type
+            type: array
+          - items:
+              type: string
+            type: array
+          description: One or more Protocol entities associated with this Submission.
           title: Has Protocol
-          type: array
         has_publication:
           anyOf:
           - items:
@@ -1659,12 +2431,17 @@ components:
           title: Has Sample
         has_study:
           anyOf:
-          - $ref: '#/components/schemas/CreateStudy'
-          - type: string
+          - items:
+              $ref: '#/components/schemas/CreateStudy'
+            type: array
+          - items:
+              type: string
+            type: array
           description: Information about a Study entities associated with this submission.
           title: Has Study
         schema_type:
-          description: The schema type an instance corresponds to.
+          enum:
+          - CreateSubmission
           title: Schema Type
           type: string
         schema_version:
@@ -1680,6 +2457,8 @@ components:
           allOf:
           - $ref: '#/components/schemas/SubmissionStatusEnum'
           description: The status of a Submission.
+      required:
+      - schema_type
       title: CreateSubmission
       type: object
     CreateWorkflow:
@@ -1709,7 +2488,8 @@ components:
           title: Name
           type: string
         schema_type:
-          description: The schema type an instance corresponds to.
+          enum:
+          - CreateWorkflow
           title: Schema Type
           type: string
         schema_version:
@@ -1722,6 +2502,8 @@ components:
             type: string
           title: Xref
           type: array
+      required:
+      - schema_type
       title: CreateWorkflow
       type: object
     CreateWorkflowStep:
@@ -1748,7 +2530,8 @@ components:
             Step.
           title: Has Workflow Parameter
         schema_type:
-          description: The schema type an instance corresponds to.
+          enum:
+          - CreateWorkflowStep
           title: Schema Type
           type: string
         schema_version:
@@ -1761,6 +2544,8 @@ components:
             type: string
           title: Xref
           type: array
+      required:
+      - schema_type
       title: CreateWorkflowStep
       type: object
     ExperimentProcessTypeEnum:
@@ -1786,6 +2571,13 @@ components:
       - pxf
       - other
       title: FileFormatEnum
+      type: string
+    ForwardOrReverseEnum:
+      description: An enumeration.
+      enum:
+      - forward
+      - reverse
+      title: ForwardOrReverseEnum
       type: string
     HTTPValidationError:
       properties:
