@@ -27,6 +27,7 @@ from ghga_service_chassis_lib.api import configure_app
 
 from metadata_transpiler_service.config import CONFIG
 from metadata_transpiler_service.core.convert import generate_json_from
+from metadata_transpiler_service.core.infer import infer_missing_fields
 from metadata_transpiler_service.creation_models import CreateSubmission
 from metadata_transpiler_service.dao.utils import (
     read_mapping_file,
@@ -64,5 +65,6 @@ async def convert_xlsx_to_json(file: UploadFile = File(...)):
         ) from exp
 
     submission_json = await generate_json_from(submission_sheets, submission_map)
+    submission_json = await infer_missing_fields(submission_json)
 
     return submission_json
