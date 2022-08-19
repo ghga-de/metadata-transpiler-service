@@ -22,8 +22,18 @@ from typing import Any, Dict, List, Optional, Union
 from pandas import DataFrame
 
 from metadata_transpiler_service.config import CONFIG
-from metadata_transpiler_service.core.schema import get_schema, is_array, is_enum
-from metadata_transpiler_service.core.utils import map_to
+from metadata_transpiler_service.core.schema import (
+    get_embedded_schema,
+    get_schema_by_type,
+    is_array,
+    is_enum,
+)
+from metadata_transpiler_service.core.utils import (
+    add_unique,
+    create_list,
+    exists_in,
+    map_to,
+)
 from metadata_transpiler_service.creation_models import CreateSubmission
 from metadata_transpiler_service.dao.utils import read_value
 
@@ -36,7 +46,7 @@ async def generate_json_from(submission_sheets: Dict, submission_map: Dict):
     submission_object: Dict[str, Any] = {}
     submission_fields: Dict[str, Any]
     sheet_names = list(submission_map.keys())
-    submission_schema = await get_schema("CreateSubmission", None)
+    submission_schema = await get_schema_by_type("CreateSubmission", None)
 
     for sheet_name in sheet_names:
         submission_sheet = submission_sheets[sheet_name]
@@ -72,13 +82,10 @@ async def generate_embedded_json_from(
         submission_field_name = submission_field
 
     if await is_array(submission_schema["properties"][submission_field_name]):
-        embedded_list = []
+        embedded_list: List = []
         list_to_iterate = []
         ref_dictionary: Dict[str, Dict] = {}
-        if isinstance(embedded_submission_fields, list):
-            list_to_iterate = embedded_submission_fields
-        else:
-            list_to_iterate.append(embedded_submission_fields)
+        list_to_iterate = await create_list(embedded_submission_fields)
         for line in range(0, len(submission_sheet.index)):
             for item in list_to_iterate:
                 embedded_json_fields = await build_embedded_submission_fields(
@@ -92,7 +99,11 @@ async def generate_embedded_json_from(
                         ref_dictionary = await get_refs(
                             embedded_json_fields, ref_dictionary
                         )
-                    embedded_list.append(embedded_json_fields)
+
+                    if not await exists_in(
+                        embedded_json_fields["alias"], embedded_list
+                    ):
+                        embedded_list.append(embedded_json_fields)
 
         if submission_field.startswith("link_"):
             json_object = await update_object_with_refs(
@@ -113,44 +124,48 @@ async def build_embedded_submission_fields(
 ) -> Union[Dict, None]:
     """Build embedded JSON object using data from Spreadsheet"""
 
-    if "_model" in map_embedded_submission_fields:
-        schema_type = map_embedded_submission_fields["_model"]
-        schema = await get_schema(schema_type, None)
-    else:
-        schema = await get_schema("CreateSubmission", field)
-
+    schema = await get_embedded_schema(map_embedded_submission_fields, field)
     field_name = await map_to("alias", map_embedded_submission_fields)
     if not field_name:
         raise ValueError(
             f"No field in the input file maps "
             f"to '{field_name}' -> 'alias' in submission"
         )
-
     field_value = await read_value(submission_sheet, count, field_name)
     if not field_value:
         return None
 
-    embedded_submission_fields = {}
+    embedded_submission_fields: Dict = {}
     for json_field, xls_col_name in map_embedded_submission_fields.items():
         if json_field.startswith("_"):
-            embedded_submission_fields[json_field] = xls_col_name
-        else:
-            if isinstance(xls_col_name, list):
+            continue
+        json_field = json_field.replace("_additional_attribute", "_attribute")
+        if isinstance(xls_col_name, list):
+            if (json_field not in embedded_submission_fields) or (
+                not embedded_submission_fields[json_field]
+            ):
                 embedded_submission_fields[json_field] = []
-                for single_col_name in xls_col_name:
-                    field_value = await read_value(
-                        submission_sheet, count, single_col_name
+            for single_col_name in xls_col_name:
+                field_value = await read_value(submission_sheet, count, single_col_name)
+                final_value = await convert_value(
+                    field_value, json_field, schema, single_col_name
+                )
+                if final_value:
+                    embedded_submission_fields[json_field] = (
+                        embedded_submission_fields[json_field] + final_value
                     )
-                    final_value = await convert_value(field_value, json_field, schema)
-                    if final_value:
-                        embedded_submission_fields[json_field] = (
-                            embedded_submission_fields[json_field] + final_value
-                        )
-            else:
-                field_value = await read_value(submission_sheet, count, xls_col_name)
+        else:
+            field_value = await read_value(submission_sheet, count, xls_col_name)
+            if (json_field not in embedded_submission_fields) or (
+                not embedded_submission_fields[json_field]
+            ):
                 embedded_submission_fields[json_field] = await convert_value(
                     field_value, json_field, schema
                 )
+            else:
+                embedded_submission_fields[json_field] = embedded_submission_fields[
+                    json_field
+                ] + await convert_value(field_value, json_field, schema)
 
     embedded_submission_fields["schema_type"] = schema["title"]
     embedded_submission_fields["schema_version"] = SCHEMA_VERSION
@@ -167,8 +182,8 @@ async def get_refs(embedded_submission_fields: Dict, ref_dictionary: Dict) -> Di
             if field_name not in ref_dictionary:
                 ref_dictionary[field_name] = {}
             if parent in ref_dictionary[field_name]:
-                ref_dictionary[field_name][parent] = (
-                    ref_dictionary[field_name][parent] + ref
+                ref_dictionary[field_name][parent] = await add_unique(
+                    ref_dictionary[field_name][parent], ref
                 )
             else:
                 ref_dictionary[field_name][parent] = ref
@@ -190,7 +205,10 @@ async def update_object_with_refs(
 
 
 async def convert_value(
-    field_value: Optional[str], field_name: str, model_schema: Dict
+    field_value: Optional[str],
+    field_name: str,
+    model_schema: Dict,
+    single_col_name: str = None,
 ) -> Union[Dict, List, str, None]:
     """Normalize raw field value and transform to requested format"""
     if not field_value:
@@ -198,7 +216,9 @@ async def convert_value(
     if await is_enum(model_schema["properties"][field_name]):
         field_value = await normalize(field_value)
     if await is_array(model_schema["properties"][field_name]):
-        return await transform(field_value, field_name, model_schema["title"])
+        return await transform(
+            field_value, field_name, model_schema["title"], single_col_name
+        )
     return field_value
 
 
@@ -207,22 +227,28 @@ async def normalize(cell_value: str) -> str:
     return cell_value.replace(" ", "_").lower()
 
 
-async def transform(cell_value: str, cell_type: str, parent: str) -> List:
+async def transform(
+    cell_value: str, cell_type: str, parent: str, single_col_name: str = None
+) -> List:
     """Transform string value to list of values depending on the required type
     (string, array, attribute(s), enumeration, embedded entity (concept))"""
     list_values = cell_value.split(";")
     if cell_type == "has_attribute":
         list_attr = []
-        for attr in list_values:
-            pair = attr.split("=")
-            obj_attr = {
-                "key": pair[0],
-                "value": pair[1],
-            }
+        if single_col_name is not None:
+            obj_attr = {"key": single_col_name, "value": cell_value}
             list_attr.append(obj_attr)
+        else:
+            for attr in list_values:
+                pair = attr.split("=")
+                obj_attr = {
+                    "key": pair[0],
+                    "value": pair[1],
+                }
+                list_attr.append(obj_attr)
         return list_attr
     if cell_type.startswith("has_") and cell_type not in CreateSubmission.__fields__:
-        schema = await get_schema(parent, cell_type)
+        schema = await get_schema_by_type(parent, cell_type)
         if "concept_name" in schema["properties"]:
             list_entities = []
             for entity in list_values:

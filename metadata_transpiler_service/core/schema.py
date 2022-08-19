@@ -51,13 +51,13 @@ async def get_reference(schema: Dict) -> Dict:
     return schema
 
 
-async def get_schema(schema_type: str, field_name: Union[str, None]) -> Dict:
+async def get_schema_by_type(schema_type: str, field_name: Union[str, None]) -> Dict:
     """
     Get schema for a metadata object. If field is provided, get embedded schema for a field
     """
     module = import_module(MODELS_MODULE_NAME)
     new_class = getattr(module, schema_type)
-    main_schema = new_class.schema()
+    main_schema = await get_reference(new_class.schema())
     if not field_name:
         return main_schema
 
@@ -65,3 +65,15 @@ async def get_schema(schema_type: str, field_name: Union[str, None]) -> Dict:
         new_class.__fields__[field_name].sub_fields[0].type_.schema()
     )
     return embedded_schema
+
+
+async def get_embedded_schema(embedded_object: Dict, field_name: str) -> Dict:
+    """
+    Get the schema for an embedded metadata object
+    """
+    if "_model" in embedded_object:
+        schema_type = embedded_object["_model"]
+        schema = await get_schema_by_type(schema_type, None)
+    else:
+        schema = await get_schema_by_type("CreateSubmission", field_name)
+    return schema
