@@ -2431,12 +2431,8 @@ components:
           title: Has Sample
         has_study:
           anyOf:
-          - items:
-              $ref: '#/components/schemas/CreateStudy'
-            type: array
-          - items:
-              type: string
-            type: array
+          - $ref: '#/components/schemas/CreateStudy'
+          - type: string
           description: Information about a Study entities associated with this submission.
           title: Has Study
         schema_type:
