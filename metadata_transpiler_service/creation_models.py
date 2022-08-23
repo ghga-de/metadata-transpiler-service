@@ -21,10 +21,10 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import List, Optional, Union, Literal
+from typing import List, Literal, Optional, Union
 
-from typing_extensions import Annotated
 from pydantic import BaseModel, Field
+from typing_extensions import Annotated
 
 metamodel_version = "None"
 version = "0.9.0"
