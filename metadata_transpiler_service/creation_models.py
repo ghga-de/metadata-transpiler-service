@@ -29,30 +29,30 @@ version = "0.9.0"
 
 
 class BiologicalSexEnum(str, Enum):
-    
+
     female = "female"
     male = "male"
     unknown = "unknown"
-    
-    
+
+
 
 class UserRoleEnum(str, Enum):
-    
+
     data_requester = "data_requester"
     data_steward = "data_steward"
-    
-    
+
+
 
 class VitalStatusEnum(str, Enum):
-    
+
     alive = "alive"
     deceased = "deceased"
     unknown = "unknown"
-    
-    
+
+
 
 class StudyTypeEnum(str, Enum):
-    
+
     whole_genome_sequencing = "whole_genome_sequencing"
     metagenomics = "metagenomics"
     transcriptome_analysis = "transcriptome_analysis"
@@ -68,11 +68,11 @@ class StudyTypeEnum(str, Enum):
     pooled_clone_sequencing = "pooled_clone_sequencing"
     genome_wide_association_study = "genome_wide_association_study"
     other = "other"
-    
-    
+
+
 
 class FileFormatEnum(str, Enum):
-    
+
     bam = "bam"
     complete_genomics = "complete_genomics"
     cram = "cram"
@@ -85,53 +85,53 @@ class FileFormatEnum(str, Enum):
     txt = "txt"
     pxf = "pxf"
     other = "other"
-    
-    
+
+
 
 class CaseControlStatusEnum(str, Enum):
-    
+
     control = "control"
     case = "case"
-    
-    
+
+
 
 class PairedOrSingleEndEnum(str, Enum):
-    
+
     paired = "paired"
     single = "single"
-    
-    
+
+
 
 class ForwardOrReverseEnum(str, Enum):
-    
+
     forward = "forward"
     reverse = "reverse"
-    
-    
+
+
 
 class SubmissionStatusEnum(str, Enum):
-    
+
     in_progress = "in_progress"
     completed = "completed"
-    
-    
+
+
 
 class ReleaseStatusEnum(str, Enum):
-    
+
     unreleased = "unreleased"
     released = "released"
-    
-    
+
+
 
 class ExperimentProcessTypeEnum(str, Enum):
-    
+
     sample_preparation = "sample_preparation"
     assay = "assay"
-    
-    
+
+
 
 class AgeRangeEnum(str, Enum):
-    
+
     number_0_5 = "0-5"
     number_6_10 = "6-10"
     number_11_15 = "11-15"
@@ -150,8 +150,8 @@ class AgeRangeEnum(str, Enum):
     number_76_80 = "76-80"
     number_80PLUS_SIGN = "80+"
     unknown = "unknown"
-    
-    
+
+
 
 class Attribute(BaseModel):
     """
@@ -161,7 +161,7 @@ class Attribute(BaseModel):
     key_type: Optional[str] = Field(None, description="""A semantic type that characterizes the attribute key. Usually this is a term from an ontology. For example, 'MAXO:0000616' indicates that the attribute is a measurement of oxygen saturation in the blood.""")
     value: str = Field(None, description="""The value for an attribute. Usually this is a numerical value (without the units).""")
     value_type: Optional[str] = Field(None, description="""The value type that characterizes the attribute value. Usually this is a term from an ontology that describes how to interpret the value. For example, 'SIO:001413' indicates that the value is to be interpreted as a percentage.""")
-    
+
 
 
 class WorkflowParameter(BaseModel):
@@ -170,7 +170,7 @@ class WorkflowParameter(BaseModel):
     """
     key: Optional[str] = Field(None, description="""Key that represents the parameter name.""")
     value: Optional[str] = Field(None, description="""Value corresponding to the the parameter key.""")
-    
+
 
 
 class OntologyClassMixin(BaseModel):
@@ -182,7 +182,7 @@ class OntologyClassMixin(BaseModel):
     description: Optional[str] = Field(None, description="""The description or definition of an ontology class.""")
     ontology_name: Optional[str] = Field(None, description="""The name of the ontology from which this ontology class was chosen.""")
     ontology_version: Optional[str] = Field(None, description="""The version of the ontology from which this ontology class was chosen.""")
-    
+
 
 
 class MetadataMixin(BaseModel):
@@ -191,7 +191,7 @@ class MetadataMixin(BaseModel):
     """
     schema_type: Literal["MetadataMixin"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-    
+
 
 
 class NamedThing(BaseModel):
@@ -202,7 +202,7 @@ class NamedThing(BaseModel):
     xref: Optional[List[str]] = Field(None, description="""Holds one or more database cross references for an entity.""")
     schema_type: Literal["NamedThing"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-    
+
 
 
 class CreateAgent(NamedThing):
@@ -215,7 +215,7 @@ class CreateAgent(NamedThing):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["CreateAgent"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-    
+
 
 
 class Person(NamedThing):
@@ -229,7 +229,7 @@ class Person(NamedThing):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["Person"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-    
+
 
 
 class Committee(NamedThing):
@@ -241,7 +241,7 @@ class Committee(NamedThing):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["Committee"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-    
+
 
 
 class MaterialEntity(NamedThing):
@@ -252,7 +252,7 @@ class MaterialEntity(NamedThing):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["MaterialEntity"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-    
+
 
 
 class BiologicalQuality(NamedThing):
@@ -263,7 +263,7 @@ class BiologicalQuality(NamedThing):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["BiologicalQuality"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-    
+
 
 
 class InformationContentEntity(NamedThing):
@@ -274,7 +274,7 @@ class InformationContentEntity(NamedThing):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["InformationContentEntity"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-    
+
 
 
 class PlannedProcess(NamedThing):
@@ -285,7 +285,7 @@ class PlannedProcess(NamedThing):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["PlannedProcess"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-    
+
 
 
 class Investigation(PlannedProcess):
@@ -298,7 +298,7 @@ class Investigation(PlannedProcess):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["Investigation"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-    
+
 
 
 class DataTransformation(PlannedProcess):
@@ -311,7 +311,7 @@ class DataTransformation(PlannedProcess):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["DataTransformation"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-    
+
 
 
 class ResearchActivity(PlannedProcess):
@@ -324,7 +324,7 @@ class ResearchActivity(PlannedProcess):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["ResearchActivity"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-    
+
 
 
 class CreateTechnology(InformationContentEntity):
@@ -335,7 +335,7 @@ class CreateTechnology(InformationContentEntity):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["CreateTechnology"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-    
+
 
 
 class CreateWorkflow(InformationContentEntity):
@@ -348,7 +348,7 @@ class CreateWorkflow(InformationContentEntity):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["CreateWorkflow"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-    
+
 
 
 class CreateWorkflowStep(InformationContentEntity):
@@ -360,7 +360,7 @@ class CreateWorkflowStep(InformationContentEntity):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["CreateWorkflowStep"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-    
+
 
 
 class CreateDiseaseOrPhenotypicFeature(BiologicalQuality):
@@ -376,7 +376,7 @@ class CreateDiseaseOrPhenotypicFeature(BiologicalQuality):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["CreateDiseaseOrPhenotypicFeature"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-    
+
 
 
 class Population(MaterialEntity):
@@ -388,7 +388,7 @@ class Population(MaterialEntity):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["Population"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-    
+
 
 
 class CreateAncestry(Population):
@@ -1014,7 +1014,7 @@ class CreateStudy(Investigation):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["CreateStudy"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-    
+
 
 
 class CreateDataset(InformationContentEntity):
@@ -1040,7 +1040,7 @@ class CreateDataset(InformationContentEntity):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["CreateDataset"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-    
+
 
 
 
@@ -1112,4 +1112,3 @@ DeprecatedMixin.update_forward_refs()
 ReleaseStatusMixin.update_forward_refs()
 CreateStudy.update_forward_refs()
 CreateDataset.update_forward_refs()
-
