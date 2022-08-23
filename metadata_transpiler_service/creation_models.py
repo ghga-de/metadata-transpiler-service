@@ -19,8 +19,10 @@
 # pylint: disable=too-many-lines,invalid-name,line-too-long,missing-class-docstring
 
 from __future__ import annotations
+
 from enum import Enum
 from typing import List, Optional, Union, Literal
+
 from typing_extensions import Annotated
 from pydantic import BaseModel, Field
 
@@ -35,12 +37,10 @@ class BiologicalSexEnum(str, Enum):
     unknown = "unknown"
 
 
-
 class UserRoleEnum(str, Enum):
 
     data_requester = "data_requester"
     data_steward = "data_steward"
-
 
 
 class VitalStatusEnum(str, Enum):
@@ -48,7 +48,6 @@ class VitalStatusEnum(str, Enum):
     alive = "alive"
     deceased = "deceased"
     unknown = "unknown"
-
 
 
 class StudyTypeEnum(str, Enum):
@@ -70,7 +69,6 @@ class StudyTypeEnum(str, Enum):
     other = "other"
 
 
-
 class FileFormatEnum(str, Enum):
 
     bam = "bam"
@@ -87,12 +85,10 @@ class FileFormatEnum(str, Enum):
     other = "other"
 
 
-
 class CaseControlStatusEnum(str, Enum):
 
     control = "control"
     case = "case"
-
 
 
 class PairedOrSingleEndEnum(str, Enum):
@@ -101,12 +97,10 @@ class PairedOrSingleEndEnum(str, Enum):
     single = "single"
 
 
-
 class ForwardOrReverseEnum(str, Enum):
 
     forward = "forward"
     reverse = "reverse"
-
 
 
 class SubmissionStatusEnum(str, Enum):
@@ -115,19 +109,16 @@ class SubmissionStatusEnum(str, Enum):
     completed = "completed"
 
 
-
 class ReleaseStatusEnum(str, Enum):
 
     unreleased = "unreleased"
     released = "released"
 
 
-
 class ExperimentProcessTypeEnum(str, Enum):
 
     sample_preparation = "sample_preparation"
     assay = "assay"
-
 
 
 class AgeRangeEnum(str, Enum):
@@ -152,7 +143,6 @@ class AgeRangeEnum(str, Enum):
     unknown = "unknown"
 
 
-
 class Attribute(BaseModel):
     """
     A key/value pair that further characterizes an entity.
@@ -163,14 +153,12 @@ class Attribute(BaseModel):
     value_type: Optional[str] = Field(None, description="""The value type that characterizes the attribute value. Usually this is a term from an ontology that describes how to interpret the value. For example, 'SIO:001413' indicates that the value is to be interpreted as a percentage.""")
 
 
-
 class WorkflowParameter(BaseModel):
     """
     A key/value pair that represents a parameter used in a Workflow Step.
     """
     key: Optional[str] = Field(None, description="""Key that represents the parameter name.""")
     value: Optional[str] = Field(None, description="""Value corresponding to the the parameter key.""")
-
 
 
 class OntologyClassMixin(BaseModel):
@@ -184,14 +172,12 @@ class OntologyClassMixin(BaseModel):
     ontology_version: Optional[str] = Field(None, description="""The version of the ontology from which this ontology class was chosen.""")
 
 
-
 class MetadataMixin(BaseModel):
     """
     Mixin for tracking schema specific metadata about an instance.
     """
     schema_type: Literal["MetadataMixin"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-
 
 
 class NamedThing(BaseModel):
@@ -204,7 +190,6 @@ class NamedThing(BaseModel):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class CreateAgent(NamedThing):
     """
     An agent is something that bears some form of responsibility for an activity taking place, for the existence of an entity, or for another agent's activity. Agents include a Person, Organization, or Software that performs an activity.
@@ -215,7 +200,6 @@ class CreateAgent(NamedThing):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["CreateAgent"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-
 
 
 class Person(NamedThing):
@@ -231,7 +215,6 @@ class Person(NamedThing):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class Committee(NamedThing):
     """
     A group of people organized for a specific purpose.
@@ -241,7 +224,6 @@ class Committee(NamedThing):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["Committee"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-
 
 
 class MaterialEntity(NamedThing):
@@ -254,7 +236,6 @@ class MaterialEntity(NamedThing):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class BiologicalQuality(NamedThing):
     """
     A biological quality is a quality held by a biological entity.
@@ -263,7 +244,6 @@ class BiologicalQuality(NamedThing):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["BiologicalQuality"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-
 
 
 class InformationContentEntity(NamedThing):
@@ -276,7 +256,6 @@ class InformationContentEntity(NamedThing):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class PlannedProcess(NamedThing):
     """
     A process is an entity that exists in time by occurring or happening, has temporal parts and always involves and depends on some entity during the time it occurs.
@@ -285,7 +264,6 @@ class PlannedProcess(NamedThing):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["PlannedProcess"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-
 
 
 class Investigation(PlannedProcess):
@@ -300,7 +278,6 @@ class Investigation(PlannedProcess):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class DataTransformation(PlannedProcess):
     """
     A data transformation technique used to analyze and interpret data to gain a better understanding of it.
@@ -311,7 +288,6 @@ class DataTransformation(PlannedProcess):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["DataTransformation"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-
 
 
 class ResearchActivity(PlannedProcess):
@@ -326,7 +302,6 @@ class ResearchActivity(PlannedProcess):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class CreateTechnology(InformationContentEntity):
     """
     A Technology is an abstraction that represents the instrument used for an assay. The Technology entity captures instrument-specific attributes that are relevant for an Experiment entity. The Technology entity may be further characterized by its children where each child has fields that are relevant to that particular technology.
@@ -335,7 +310,6 @@ class CreateTechnology(InformationContentEntity):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["CreateTechnology"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-
 
 
 class CreateWorkflow(InformationContentEntity):
@@ -350,7 +324,6 @@ class CreateWorkflow(InformationContentEntity):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class CreateWorkflowStep(InformationContentEntity):
     """
     A Workflow Step represents each individual step performed in a Workflow. If the Workflow is a single-step workflow then the Workflow has just one Workflow Step entity. If the Workflow is a multi-step workflow then the Workflow has a Workflow Step entity for each step. All Workflow step specific attributes like parameters, and metadata about execution environment are captured by the Workflow Step entity.
@@ -360,7 +333,6 @@ class CreateWorkflowStep(InformationContentEntity):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["CreateWorkflowStep"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-
 
 
 class CreateDiseaseOrPhenotypicFeature(BiologicalQuality):
@@ -378,7 +350,6 @@ class CreateDiseaseOrPhenotypicFeature(BiologicalQuality):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class Population(MaterialEntity):
     """
     A population is a collection of individuals from the same taxonomic class living, counted or sampled at a particular site or in a particular area.
@@ -388,7 +359,6 @@ class Population(MaterialEntity):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["Population"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-
 
 
 class CreateAncestry(Population):
@@ -407,7 +377,6 @@ class CreateAncestry(Population):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class CreateAnalysisProcess(PlannedProcess):
     """
     An analysis process is a process that describes how one or more Files, from a Study, are transformed to another set of Files via a Workflow. The analysis process also keeps track of the workflow metadata and the Agent that is running the Analysis.
@@ -423,7 +392,6 @@ class CreateAnalysisProcess(PlannedProcess):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class CreateDataUseCondition(InformationContentEntity):
     """
     Data Use Condition represents the use conditions associated with a policy.
@@ -434,7 +402,6 @@ class CreateDataUseCondition(InformationContentEntity):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["CreateDataUseCondition"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-
 
 
 class CreateMember(Person):
@@ -453,7 +420,6 @@ class CreateMember(Person):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class CreatePublication(InformationContentEntity):
     """
     The Publication entity represents a publication. While a publication can be any article that is published, the minimum expectation is that the publication has a valid DOI.
@@ -464,7 +430,6 @@ class CreatePublication(InformationContentEntity):
     xref: Optional[List[str]] = Field(None, description="""One or more cross-references for this Publication.""")
     schema_type: Literal["CreatePublication"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-
 
 
 class CreateAnatomicalEntity(MaterialEntity):
@@ -482,7 +447,6 @@ class CreateAnatomicalEntity(MaterialEntity):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class CreateCellLine(MaterialEntity):
     """
     A cultured cell population that represents a genetically stable and homogenous population of cultured cells that shares a common propagation history.
@@ -491,7 +455,6 @@ class CreateCellLine(MaterialEntity):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["CreateCellLine"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-
 
 
 class CreateDisease(CreateDiseaseOrPhenotypicFeature):
@@ -509,7 +472,6 @@ class CreateDisease(CreateDiseaseOrPhenotypicFeature):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class CreatePhenotypicFeature(CreateDiseaseOrPhenotypicFeature):
     """
     The observable form taken by some character (or group of characters) in an individual or an organism, excluding pathology and disease. The detectable outward manifestations of a specific genotype.
@@ -525,7 +487,6 @@ class CreatePhenotypicFeature(CreateDiseaseOrPhenotypicFeature):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class CreateUser(Person):
     """
     A user in GHGA.
@@ -539,7 +500,6 @@ class CreateUser(Person):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["CreateUser"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-
 
 
 class CreateSubmission(BaseModel):
@@ -567,7 +527,6 @@ class CreateSubmission(BaseModel):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class CreateDataUsePermission(InformationContentEntity):
     """
     A data item that is used to indicate consent permissions for datasets and/or materials and relates to the purposes for which datasets and/or material might be removed, stored or used.
@@ -581,7 +540,6 @@ class CreateDataUsePermission(InformationContentEntity):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["CreateDataUsePermission"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-
 
 
 class CreateDataUseModifier(InformationContentEntity):
@@ -599,13 +557,11 @@ class CreateDataUseModifier(InformationContentEntity):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class AccessionMixin(BaseModel):
     """
     Mixin for entities that can be assigned a GHGA accession.
     """
     accession: Optional[str] = Field(None, description="""A unique GHGA identifier assigned to an entity for the sole purpose of referring to that entity in a global scope.""")
-
 
 
 class CreateBiospecimen(MaterialEntity):
@@ -628,7 +584,6 @@ class CreateBiospecimen(MaterialEntity):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class CreateFamily(Population):
     """
     A domestic group, or a number of domestic groups linked through descent (demonstrated or stipulated) from a common ancestor, marriage, or adoption.
@@ -641,7 +596,6 @@ class CreateFamily(Population):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["CreateFamily"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-
 
 
 class CreateCohort(Population):
@@ -657,13 +611,11 @@ class CreateCohort(Population):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class EgaAccessionMixin(BaseModel):
     """
     Mixin for entities that can be assigned an EGA accession, in addition to GHGA accession.
     """
     ega_accession: Optional[str] = Field(None, description="""A unique European Genome-Phenome Archive (EGA) identifier assigned to an entity for the sole purpose of referring to that entity within the EGA federated network.""")
-
 
 
 class CreateIndividual(Person):
@@ -692,7 +644,6 @@ class CreateIndividual(Person):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class CreateDonor(CreateIndividual):
     """
     A Donor is an Individual that participates in a research Study by donating a Biospecimen. The use of the Biospecimen is restricted to the consent provided by the Donor.
@@ -719,7 +670,6 @@ class CreateDonor(CreateIndividual):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class CreateAnalysis(DataTransformation):
     """
     An Analysis is a data transformation that transforms input data to output data. The workflow used to achieve this transformation and the individual steps are also captured.
@@ -742,13 +692,11 @@ class CreateAnalysis(DataTransformation):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class AttributeMixin(BaseModel):
     """
     Mixin for entities that can have one or more attributes.
     """
     has_attribute: Optional[List[Attribute]] = Field(None, description="""Key/value pairs corresponding to an entity.""")
-
 
 
 class CreateProject(ResearchActivity):
@@ -763,7 +711,6 @@ class CreateProject(ResearchActivity):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["CreateProject"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-
 
 
 class CreateExperiment(Investigation):
@@ -790,7 +737,6 @@ class CreateExperiment(Investigation):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class CreateExperimentProcess(PlannedProcess):
     """
     An Experiment Process is a process that describes how a Sample is transformed to a File via an assay. The Experiment Process also keeps track of the Protocol used and the Agent that is running the experiment.
@@ -808,7 +754,6 @@ class CreateExperimentProcess(PlannedProcess):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class CreateProtocol(InformationContentEntity):
     """
     A plan specification which has sufficient level of detail and quantitative information to communicate it between investigation agents, so that different investigation agents will reliably be able to independently reproduce the process.
@@ -823,7 +768,6 @@ class CreateProtocol(InformationContentEntity):
     xref: Optional[List[str]] = Field(None, description="""One or more cross-references for this Protocol.  (Eg: manufacturer protocol, protocol from publication etc )""")
     schema_type: Literal["CreateProtocol"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-
 
 
 class CreateLibraryPreparationProtocol(CreateProtocol):
@@ -851,7 +795,6 @@ class CreateLibraryPreparationProtocol(CreateProtocol):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["CreateLibraryPreparationProtocol"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-
 
 
 class CreateSequencingProtocol(CreateProtocol):
@@ -887,7 +830,6 @@ class CreateSequencingProtocol(CreateProtocol):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class CreateSample(MaterialEntity):
     """
     A sample is a limited quantity of something to be used for testing, analysis, inspection, investigation, demonstration, or trial use. A sample is prepared from a Biospecimen (isolate or tissue).
@@ -911,7 +853,6 @@ class CreateSample(MaterialEntity):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class CreateFile(InformationContentEntity):
     """
     A file is an object that contains information generated from a process, either an Experiment or an Analysis.
@@ -929,7 +870,6 @@ class CreateFile(InformationContentEntity):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["CreateFile"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-
 
 
 class CreateDataAccessPolicy(InformationContentEntity):
@@ -950,7 +890,6 @@ class CreateDataAccessPolicy(InformationContentEntity):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["CreateDataAccessPolicy"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-
 
 
 class CreateDataAccessCommittee(Committee):
@@ -985,7 +924,6 @@ class DeprecatedMixin(BaseModel):
     deprecation_date: Optional[str] = Field(None, description="""The timestamp (in ISO 8601 format) when the entity was deprecated.""")
 
 
-
 class ReleaseStatusMixin(BaseModel):
     """
     Mixin for entities that can be released at a later point in time.
@@ -1016,7 +954,6 @@ class CreateStudy(Investigation):
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
 
 
-
 class CreateDataset(InformationContentEntity):
     """
     A Dataset is a collection of Files that is prepared for distribution and is tied to a Data Access Policy.
@@ -1040,7 +977,6 @@ class CreateDataset(InformationContentEntity):
     xref: Optional[List[str]] = Field(None, description="""Database cross references for an entity.""")
     schema_type: Literal["CreateDataset"]
     schema_version: Optional[str] = Field(None, description="""The version of the schema an instance corresponds to.""")
-
 
 
 
