@@ -8,7 +8,7 @@ cd /workspace
 # use-feature way of installing packages
 # install with testing dependencies
 pip install \
-    --use-feature=in-tree-build \
+    --use-feature=2020-resolver \
     -e \
     ".[all]"
 
