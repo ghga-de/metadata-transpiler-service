@@ -323,7 +323,7 @@ class InformationContentEntity(NamedThing):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    # schema_type: Literal["InformationContentEntity"]
+    schema_type: Literal["InformationContentEntity"]
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
