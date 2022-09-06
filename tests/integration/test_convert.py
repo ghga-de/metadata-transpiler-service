@@ -43,13 +43,13 @@ def test_convert_xlsx():
 
         assert "has_study" in create_submission_entity
         assert "has_experiment" in create_submission_entity
-        assert len(create_submission_entity["has_experiment"]) == 2
+        assert len(create_submission_entity["has_experiment"]) == 11
         assert "has_project" in create_submission_entity
         assert "has_publication" in create_submission_entity
         assert "has_sample" in create_submission_entity
-        assert len(create_submission_entity["has_sample"]) == 10
+        assert len(create_submission_entity["has_sample"]) == 22
         assert "has_individual" in create_submission_entity
         assert "has_protocol" in create_submission_entity
-        assert len(create_submission_entity["has_protocol"]) == 4
+        assert len(create_submission_entity["has_protocol"]) == 22
         assert "has_analysis" in create_submission_entity
         assert "has_file" in create_submission_entity

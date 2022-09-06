@@ -69,7 +69,7 @@
       "has_file": "submitter_file_alias",
       "has_sample": "submitter_sample_alias",
       "title": "dataset_title",
-      "type": "dataset_types"
+      "type": "submitter_dataset_type"
     },
     "has_member": {
       "_model": "CreateMember",
