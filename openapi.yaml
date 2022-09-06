@@ -911,9 +911,11 @@ components:
           title: Title
           type: string
         type:
-          description: The type of an entity.
+          description: The type of a dataset.
+          items:
+            type: string
           title: Type
-          type: string
+          type: array
         xref:
           description: Database cross references for an entity.
           items:
