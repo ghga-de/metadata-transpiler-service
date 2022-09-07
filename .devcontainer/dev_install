@@ -8,7 +8,6 @@ cd /workspace
 # use-feature way of installing packages
 # install with testing dependencies
 pip install \
-    --use-feature=in-tree-build \
     -e \
     ".[all]"
 

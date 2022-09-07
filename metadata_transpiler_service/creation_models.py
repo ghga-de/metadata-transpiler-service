@@ -12,7 +12,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Creation models generated from the GHGA Metadata Schema"""
+
+"""Defines all dataclasses/classes pertaining to a data model or schema"""
+
+
+# pylint: disable=too-many-lines,invalid-name,line-too-long,missing-class-docstring
 
 from __future__ import annotations
 
@@ -21,8 +25,6 @@ from typing import List, Literal, Optional, Union
 
 from pydantic import BaseModel, Field
 from typing_extensions import Annotated
-
-# pylint: disable=too-many-lines,invalid-name,line-too-long,missing-class-docstring
 
 metamodel_version = "None"
 version = "0.9.0"
@@ -792,7 +794,7 @@ class CreateSubmission(BaseModel):
         None,
         description="""Institution/Center/Data Hub that is providing this submission.""",
     )
-    has_study: Optional[Union[List[CreateStudy], List[str]]] = Field(
+    has_study: Optional[Union[CreateStudy, str]] = Field(
         None,
         description="""Information about a Study entities associated with this submission.""",
     )
@@ -1892,7 +1894,7 @@ class CreateDataset(InformationContentEntity):
 
     title: str = Field(None, description="""A title for the submitted Dataset.""")
     description: str = Field(None, description="""Description of an entity.""")
-    type: Optional[str] = Field(None, description="""The type of an entity.""")
+    type: List[str] = Field(None, description="""The type of a dataset.""")
     has_study: Optional[Union[List[CreateStudy], List[str]]] = Field(
         None,
         description="""One or more Study entities that are referenced by this Dataset.""",

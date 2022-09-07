@@ -911,9 +911,11 @@ components:
           title: Title
           type: string
         type:
-          description: The type of an entity.
+          description: The type of a dataset.
+          items:
+            type: string
           title: Type
-          type: string
+          type: array
         xref:
           description: Database cross references for an entity.
           items:
@@ -2431,12 +2433,8 @@ components:
           title: Has Sample
         has_study:
           anyOf:
-          - items:
-              $ref: '#/components/schemas/CreateStudy'
-            type: array
-          - items:
-              type: string
-            type: array
+          - $ref: '#/components/schemas/CreateStudy'
+          - type: string
           description: Information about a Study entities associated with this submission.
           title: Has Study
         schema_type:
