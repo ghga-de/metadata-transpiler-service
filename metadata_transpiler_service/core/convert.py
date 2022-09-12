@@ -27,6 +27,7 @@ from metadata_transpiler_service.core.schema import (
     get_schema_by_type,
     is_array,
     is_enum,
+    is_integer,
 )
 from metadata_transpiler_service.core.utils import (
     add_unique,
@@ -209,12 +210,14 @@ async def convert_value(
     field_name: str,
     model_schema: Dict,
     single_col_name: str = None,
-) -> Union[Dict, List, str, None]:
+) -> Union[Dict, List, str, int, None]:
     """Normalize raw field value and transform to requested format"""
     if not field_value:
         return None
     if await is_enum(model_schema["properties"][field_name]):
         field_value = await normalize(field_value)
+    if await is_integer(model_schema["properties"][field_name]):
+        return int(float(field_value))
     if await is_array(model_schema["properties"][field_name]):
         return await transform(
             field_value, field_name, model_schema["title"], single_col_name

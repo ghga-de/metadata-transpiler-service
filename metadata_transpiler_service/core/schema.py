@@ -43,6 +43,14 @@ async def is_enum(embedded_submission_fieldsect: Dict):
     return False
 
 
+async def is_integer(embedded_submission_fieldsect: Dict):
+    """Returns true if an embedded object is an integer"""
+    if "type" in embedded_submission_fieldsect:
+        if embedded_submission_fieldsect["type"] == "integer":
+            return True
+    return False
+
+
 async def get_reference(schema: Dict) -> Dict:
     """Extract reference to scheme if exists, otherwise the original schema"""
     if "$ref" in schema:
