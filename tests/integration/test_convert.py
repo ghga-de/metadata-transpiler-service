@@ -48,6 +48,10 @@ def test_convert_xlsx():
         assert "has_publication" in create_submission_entity
         assert "has_sample" in create_submission_entity
         assert len(create_submission_entity["has_sample"]) == 22
+
+        create_sample_entity = create_submission_entity["has_sample"]
+        assert "case_control_status" in create_sample_entity[0]
+
         assert "has_individual" in create_submission_entity
         assert "has_protocol" in create_submission_entity
         assert len(create_submission_entity["has_protocol"]) == 22
