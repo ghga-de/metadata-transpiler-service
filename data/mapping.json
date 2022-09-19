@@ -160,6 +160,7 @@
     },
     "has_sample": {
       "alias": "submitter_sample_alias",
+      "case_control_status": "sample_case_control_status",
       "description": "sample_description",
       "has_additional_attribute": [
         "sample_index_sequence",
