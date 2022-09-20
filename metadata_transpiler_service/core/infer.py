@@ -17,9 +17,14 @@
 Module containing the inference methods.
 """
 
-from typing import Dict
+from typing import Dict, List
 
 from metadata_transpiler_service.core.schema import get_schema_by_type, is_array
+from metadata_transpiler_service.core.utils import (
+    add_unique,
+    create_list,
+    get_from_list,
+)
 
 
 async def infer_missing_fields(submission: Dict) -> Dict:
@@ -27,12 +32,14 @@ async def infer_missing_fields(submission: Dict) -> Dict:
     submission = await add_alias("study", "dataset", submission)
     submission = await add_alias("study", "experiment", submission)
     submission = await add_alias("study", "analysis", submission)
+    submission = await autofill_alias("sample", "dataset", "experiment", submission)
+    submission = await autofill_alias("file", "dataset", "experiment", submission)
 
     return submission
 
 
 async def add_alias(embedded_object: str, parent_object: str, submission: Dict) -> Dict:
-    """Generate JSON for embedded submission objects"""
+    """Add missing alias to embedded object from parent object"""
 
     field_name = "has_" + parent_object
     schema_name = "Create" + parent_object.capitalize()
@@ -61,5 +68,47 @@ async def add_alias(embedded_object: str, parent_object: str, submission: Dict) 
             object_to_change[embedded_field_name] = alias
 
         submission[field_name] = object_to_change
+
+    return submission
+
+
+async def autofill_alias(
+    embedded_object: str, parent_object: str, source_object: str, submission: Dict
+) -> Dict:
+    """Collect list of aliases for embedded object from source object
+    to autofill the missing entries in parent object"""
+
+    field_name = "has_" + parent_object
+    embedded_field_name = "has_" + embedded_object
+    source_field_name = "has_" + source_object
+
+    if source_field_name not in submission:
+        return submission
+
+    list_to_iterate = await create_list(submission[field_name])
+    object_list = []
+    for single_object in list_to_iterate:
+        if (
+            single_object[embedded_field_name] is None
+            or len(single_object[embedded_field_name]) == 0
+        ):
+            if source_field_name in single_object:
+                list_of_source_ids = single_object[source_field_name]
+                list_of_embedded_ids: List[str] = []
+                for item in list_of_source_ids:
+                    extract_from = await get_from_list(
+                        item, submission[source_field_name]
+                    )
+                    if extract_from is None or embedded_field_name not in extract_from:
+                        continue
+                    list_of_embedded_ids = await add_unique(
+                        list_of_embedded_ids, extract_from[embedded_field_name]
+                    )
+            single_object[embedded_field_name] = list_of_embedded_ids
+        object_list.append(single_object)
+    if isinstance(submission[field_name], list):
+        submission[field_name] = object_list
+    else:
+        submission[field_name] = object_list[0]
 
     return submission

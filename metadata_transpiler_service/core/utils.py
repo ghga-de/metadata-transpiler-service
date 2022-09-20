@@ -63,6 +63,24 @@ async def exists_in(alias: str, embedded_list: List) -> bool:
     return False
 
 
+async def get_from_list(alias: str, embedded_list: List) -> Union[Dict, None]:
+    """Select an object from embedded list by alias (only the first hit)
+
+    Args:
+        alias (str): alias of the object to check
+        embedded_list (List): the list of objects
+
+    Returns:
+        Dict: the first found object, if not found, then None
+    """
+    hits = [x for x in embedded_list if x["alias"] == alias]
+
+    if len(hits) == 1:
+        return hits[0]
+
+    return None
+
+
 async def create_list(input_object: object) -> List:
     """Transform object to list, if it is not a list already"""
     if isinstance(input_object, list):

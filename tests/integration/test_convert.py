@@ -57,3 +57,18 @@ def test_convert_xlsx():
         assert len(create_submission_entity["has_protocol"]) == 22
         assert "has_analysis" in create_submission_entity
         assert "has_file" in create_submission_entity
+
+    with ZipFile(file_path_zip, "r") as zip_obj:
+        xls_file = {"file": zip_obj.open("submission_example_empty_columns.xlsx", "r")}
+        response = client.post("/convert", files=xls_file)
+
+        assert response.status_code == status.HTTP_200_OK
+
+        create_submission_entity = response.json()
+
+        assert "has_dataset" in create_submission_entity
+        create_dataset_entity = create_submission_entity["has_dataset"][0]
+        assert "has_file" in create_dataset_entity
+        assert len(create_dataset_entity["has_file"]) == 4
+        assert "has_sample" in create_dataset_entity
+        assert len(create_dataset_entity["has_sample"]) == 4
