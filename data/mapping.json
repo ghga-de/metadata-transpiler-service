@@ -31,8 +31,11 @@
     "has_publication": {
       "abstract": "publication_abstract",
       "alias": "publication_id",
+      "author": "author",
+      "journal": "journal",
       "title": "publication_title",
-      "xref": "publication_xref"
+      "xref": "publication_xref",
+      "year": "year_of_publication"
     },
     "has_study": {
       "affiliation": "study_affiliations",
@@ -134,8 +137,7 @@
       "checksum": "file_checksum",
       "checksum_type": "file_checksum_type",
       "format": "file_format",
-      "name": "file_name",
-      "size": "file_size"
+      "name": "file_name"
     }
   },
   "Sample_Submission_Sheet": {
