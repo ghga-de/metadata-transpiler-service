@@ -103,6 +103,7 @@ def update_docs():
 def check_docs():
     """Check whether the example config and config schema files documenting the config
     options are up to date.
+
     Raises:
         ValidationError: if not up to date.
     """
