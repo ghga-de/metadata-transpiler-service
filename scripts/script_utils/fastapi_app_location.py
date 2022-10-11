@@ -20,4 +20,4 @@
 # pylint: skip-file
 
 # Please adapt to package structure:
-from my_microservice.api.main import app
+from metadata_transpiler_service.api.main import app
