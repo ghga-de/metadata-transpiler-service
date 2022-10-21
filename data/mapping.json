@@ -137,7 +137,8 @@
       "checksum": "file_checksum",
       "checksum_type": "file_checksum_type",
       "format": "file_format",
-      "name": "file_name"
+      "name": "file_name",
+      "size": "file_size"
     }
   },
   "Sample_Submission_Sheet": {
