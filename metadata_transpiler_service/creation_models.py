@@ -638,6 +638,14 @@ class CreatePublication(InformationContentEntity):
         None,
         description="""The study abstract that describes the goals. Can also hold abstract from a publication related to this study.""",
     )
+    author: Optional[str] = Field(
+        None,
+        description="""The individual who is responsible for the content of a document version.""",
+    )
+    year: Optional[int] = Field(
+        None, description="""Year in which the paper was published."""
+    )
+    journal: Optional[str] = Field(None, description="""Name of the journal.""")
     alias: str = Field(None, description="""The alias for an entity.""")
     xref: Optional[List[str]] = Field(
         None, description="""One or more cross-references for this Publication."""
