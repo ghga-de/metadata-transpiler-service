@@ -18,6 +18,7 @@
 
 # pylint: disable=too-many-lines,invalid-name,line-too-long,missing-class-docstring
 
+
 from __future__ import annotations
 
 from enum import Enum
@@ -27,31 +28,27 @@ from pydantic import BaseModel, Field
 from typing_extensions import Annotated
 
 metamodel_version = "None"
-version = "0.9.0"
+version = "0.9.1"
 
 
 class BiologicalSexEnum(str, Enum):
-
     female = "female"
     male = "male"
     unknown = "unknown"
 
 
 class UserRoleEnum(str, Enum):
-
     data_requester = "data_requester"
     data_steward = "data_steward"
 
 
 class VitalStatusEnum(str, Enum):
-
     alive = "alive"
     deceased = "deceased"
     unknown = "unknown"
 
 
 class StudyTypeEnum(str, Enum):
-
     whole_genome_sequencing = "whole_genome_sequencing"
     metagenomics = "metagenomics"
     transcriptome_analysis = "transcriptome_analysis"
@@ -70,7 +67,6 @@ class StudyTypeEnum(str, Enum):
 
 
 class FileFormatEnum(str, Enum):
-
     bam = "bam"
     complete_genomics = "complete_genomics"
     cram = "cram"
@@ -86,43 +82,41 @@ class FileFormatEnum(str, Enum):
 
 
 class CaseControlStatusEnum(str, Enum):
-
-    control = "control"
-    case = "case"
+    neither_case_or_control_status = "neither case or control status"
+    probable_case_status = "probable case status"
+    probable_control_status = "probable control status"
+    true_case_status = "true case status"
+    true_control_status = "true control status"
+    tumor = "tumor"
+    normal = "normal"
 
 
 class PairedOrSingleEndEnum(str, Enum):
-
     paired = "paired"
     single = "single"
 
 
 class ForwardOrReverseEnum(str, Enum):
-
     forward = "forward"
     reverse = "reverse"
 
 
 class SubmissionStatusEnum(str, Enum):
-
     in_progress = "in_progress"
     completed = "completed"
 
 
 class ReleaseStatusEnum(str, Enum):
-
     unreleased = "unreleased"
     released = "released"
 
 
 class ExperimentProcessTypeEnum(str, Enum):
-
     sample_preparation = "sample_preparation"
     assay = "assay"
 
 
 class AgeRangeEnum(str, Enum):
-
     number_0_5 = "0-5"
     number_6_10 = "6-10"
     number_11_15 = "11-15"
@@ -225,7 +219,7 @@ class NamedThing(BaseModel):
         None,
         description="""Holds one or more database cross references for an entity.""",
     )
-    schema_type: Literal["NamedThing"]
+    schema_type: Literal["NamedThing"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -580,29 +574,6 @@ class CreateAnalysisProcess(PlannedProcess):
     )
 
 
-class CreateDataUseCondition(InformationContentEntity):
-    """
-    Data Use Condition represents the use conditions associated with a policy.
-    """
-
-    has_data_use_permission: Union[CreateDataUsePermission, str] = Field(
-        None,
-        description="""Data use permission associated with a policy. Typically one or more terms from DUO and should be descendants of 'DUO:0000001 data use permission'.""",
-    )
-    has_data_use_modifier: Optional[Union[CreateDataUseModifier, str]] = Field(
-        None,
-        description="""Modifier for Data use permission associated with a policy. Should be descendants of 'DUO:0000017 data use modifier'""",
-    )
-    alias: str = Field(None, description="""The alias for an entity.""")
-    xref: Optional[List[str]] = Field(
-        None, description="""Database cross references for an entity."""
-    )
-    schema_type: Literal["CreateDataUseCondition"]  # type: ignore
-    schema_version: Optional[str] = Field(
-        None, description="""The version of the schema an instance corresponds to."""
-    )
-
-
 class CreateMember(Person):
     """
     Member of an Organization or a Committee.
@@ -868,7 +839,7 @@ class CreateSubmission(BaseModel):
     submission_status: Optional[SubmissionStatusEnum] = Field(
         None, description="""The status of a Submission."""
     )
-    schema_type: Literal["CreateSubmission"]
+    schema_type: Literal["CreateSubmission"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -971,25 +942,9 @@ class CreateBiospecimen(MaterialEntity):
         None,
         description="""Methods by which a biospecimen or a sample is stored (e.g. frozen in liquid nitrogen).""",
     )
-    has_individual: Optional[Union[AnnotatedCreateIndividual, str]] = Field(
+    has_individual: Union[AnnotatedCreateIndividual, str] = Field(
         None,
         description="""The Individual entity from which this Biospecimen was derived.""",
-    )
-    has_anatomical_entity: Optional[
-        Union[List[CreateAnatomicalEntity], List[str]]
-    ] = Field(
-        None,
-        description="""The Anatomical entity, that represents the site, from which the Biospecimen was retrieved. Typically, a concept from Uber-anatomy Ontology (UBERON). For example, 'UBERON:0008307' indicates that the Biospecimen was extracted from the 'Heart Endothelium' of an Individual.""",
-    )
-    has_disease: Optional[Union[List[CreateDisease], List[str]]] = Field(
-        None,
-        description="""The Disease entity that is associated with the Individual. Typically, a concept from Mondo Disease Ontology. For example, 'MONDO:0005267' indicates that the Individual suffers from 'Heart Disease'.""",
-    )
-    has_phenotypic_feature: Optional[
-        Union[List[CreatePhenotypicFeature], List[str]]
-    ] = Field(
-        None,
-        description="""The Phenotypic Feature entity that is associated with the Individual. Typically, a concept from Human Phenotype Ontology. For example, 'HP:0100244' indicates that the Individual exhibits 'Fibrosarcoma' as one of its phenotype.""",
     )
     accession: Optional[str] = Field(
         None,
@@ -1219,7 +1174,7 @@ class CreateAnalysis(DataTransformation):
     has_study: Optional[Union[CreateStudy, str]] = Field(
         None, description="""The Study entity associated with this Analysis."""
     )
-    has_workflow: Union[List[CreateWorkflow], List[str]] = Field(
+    has_workflow: Optional[Union[List[CreateWorkflow], List[str]]] = Field(
         None,
         description="""One or more Workflow entities associated with this Analysis.""",
     )
@@ -1233,6 +1188,10 @@ class CreateAnalysis(DataTransformation):
         None,
         description="""The output data File entities generated by this Analysis.""",
     )
+    description: Optional[str] = Field(
+        None,
+        description="""Describing how an Analysis was carried out. (e.g.: computational tools, settings, etc.).""",
+    )
     accession: Optional[str] = Field(
         None,
         description="""A unique GHGA identifier assigned to an entity for the sole purpose of referring to that entity in a global scope.""",
@@ -1243,10 +1202,6 @@ class CreateAnalysis(DataTransformation):
     )
     title: Optional[str] = Field(
         None, description="""The title that describes an entity."""
-    )
-    description: Optional[str] = Field(
-        None,
-        description="""Describing how an Analysis was carried out. (e.g.: computational tools, settings, etc.).""",
     )
     alias: str = Field(
         None, description="""An alias uniquely identifying this Analysis entitiy."""
@@ -1463,11 +1418,11 @@ class CreateLibraryPreparationProtocol(CreateProtocol):
         None,
         description="""The general method for sequencing library preparation (e.g. KAPA PCR-free).""",
     )
-    library_preparation_kit_retail_name: str = Field(
+    library_preparation_kit_retail_name: Optional[str] = Field(
         None,
         description="""A unique identifier for the kit used to construct a genomic library. This may include the vendor name, kit name and kit version  (e.g. Agilent sure select Human Exome V8, Twist RefSeq Exome, etc.)""",
     )
-    library_preparation_kit_manufacturer: str = Field(
+    library_preparation_kit_manufacturer: Optional[str] = Field(
         None, description="""Manufacturer of library preparation kit"""
     )
     primer: Optional[str] = Field(
@@ -1478,7 +1433,7 @@ class CreateLibraryPreparationProtocol(CreateProtocol):
         None,
         description="""The end of the cDNA molecule that is preferentially sequenced, e.g. 3/5 prime tag or end, or the full-length transcript.""",
     )
-    target_regions: Optional[str] = Field(
+    target_regions: Optional[List[str]] = Field(
         None,
         description="""Subset of genes or specific regions of the genome, which are most likely to be involved in the phenotype under study.""",
     )
@@ -1734,9 +1689,15 @@ class CreateDataAccessPolicy(InformationContentEntity):
     has_data_access_committee: Union[CreateDataAccessCommittee, str] = Field(
         None, description="""The Data Access Committee linked to this policy."""
     )
-    has_data_use_condition: Optional[List[CreateDataUseCondition]] = Field(
+    has_data_use_permission: Union[CreateDataUsePermission, str] = Field(
         None,
-        description="""Data Use Condition entities that are associated with the Data Access Policy.""",
+        description="""Data use permission associated with a policy. Typically one or more terms from DUO and should be descendants of 'DUO:0000001 data use permission'.""",
+    )
+    has_data_use_modifier: Optional[
+        Union[List[CreateDataUseModifier], List[str]]
+    ] = Field(
+        None,
+        description="""Modifier for Data use permission associated with a policy. Should be descendants of 'DUO:0000017 data use modifier'""",
     )
     data_request_form: Optional[str] = Field(
         None,
@@ -1989,7 +1950,6 @@ AnnotatedNamedThing = Annotated[
         CreateDataUsePermission,
         CreatePublication,
         CreateDataAccessPolicy,
-        CreateDataUseCondition,
         CreateDataset,
         CreateFile,
         CreateWorkflowStep,
@@ -2042,7 +2002,6 @@ CreateDiseaseOrPhenotypicFeature.update_forward_refs()
 Population.update_forward_refs()
 CreateAncestry.update_forward_refs()
 CreateAnalysisProcess.update_forward_refs()
-CreateDataUseCondition.update_forward_refs()
 CreateMember.update_forward_refs()
 CreatePublication.update_forward_refs()
 CreateAnatomicalEntity.update_forward_refs()

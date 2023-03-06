@@ -31,7 +31,7 @@ from metadata_transpiler_service.config import CONFIG
 MAPPING_URL = CONFIG.mapping_url
 TMP_FILE = "tmp_file.xlsx"
 
-SKIP_ROWS = list(range(2, 5))
+SKIP_ROWS = list(range(2, 6))
 HEADER = 1
 INDEX_COL = 0
 

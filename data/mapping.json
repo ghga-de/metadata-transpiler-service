@@ -58,7 +58,8 @@
       "alias": "dap_alias",
       "description": "dap_description",
       "has_data_access_committee": "dac_alias",
-      "has_data_use_conditions": "dap_data_use_conditions",
+      "has_data_use_modifier": "dap_data_use_modifier",
+      "has_data_use_permission": "dap_data_use_permission",
       "name": "dap_name",
       "policy_text": "dap_policy_text",
       "policy_url": "dap_policy_url"

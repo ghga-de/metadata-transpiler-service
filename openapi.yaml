@@ -71,8 +71,14 @@ components:
     CaseControlStatusEnum:
       description: An enumeration.
       enum:
-      - control
-      - case
+      - neither case or control status
+      - probable case status
+      - probable control status
+      - true case status
+      - true control status
+      - unable to assess case or control status
+      - tumor
+      - normal
       title: CaseControlStatusEnum
       type: string
     CreateAgent:
