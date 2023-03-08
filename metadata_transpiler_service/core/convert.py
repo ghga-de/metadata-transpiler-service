@@ -209,7 +209,7 @@ async def convert_value(
     field_value: Optional[str],
     field_name: str,
     model_schema: Dict,
-    single_col_name: str = None,
+    single_col_name: Optional[str] = None,
 ) -> Union[Dict, List, str, int, None]:
     """Normalize raw field value and transform to requested format"""
     if not field_value:
@@ -231,7 +231,7 @@ async def normalize(cell_value: str) -> str:
 
 
 async def transform(
-    cell_value: str, cell_type: str, parent: str, single_col_name: str = None
+    cell_value: str, cell_type: str, parent: str, single_col_name: Optional[str] = None
 ) -> List:
     """Transform string value to list of values depending on the required type
     (string, array, attribute(s), enumeration, embedded entity (concept))"""
