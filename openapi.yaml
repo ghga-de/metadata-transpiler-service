@@ -422,7 +422,7 @@ components:
           type: string
         has_individual:
           anyOf:
-          - anyOf:
+          - oneOf:
             - $ref: '#/components/schemas/CreateDonor'
             - $ref: '#/components/schemas/CreateIndividual'
           - type: string
@@ -971,14 +971,14 @@ components:
         has_children:
           anyOf:
           - items:
-              anyOf:
-              - $ref: '#/components/schemas/CreateDonor'
-              - $ref: '#/components/schemas/CreateIndividual'
               discriminator:
                 mapping:
                   CreateDonor: '#/components/schemas/CreateDonor'
                   CreateIndividual: '#/components/schemas/CreateIndividual'
                 propertyName: schema_type
+              oneOf:
+              - $ref: '#/components/schemas/CreateDonor'
+              - $ref: '#/components/schemas/CreateIndividual'
             type: array
           - items:
               type: string
@@ -1008,14 +1008,14 @@ components:
         has_parent:
           anyOf:
           - items:
-              anyOf:
-              - $ref: '#/components/schemas/CreateDonor'
-              - $ref: '#/components/schemas/CreateIndividual'
               discriminator:
                 mapping:
                   CreateDonor: '#/components/schemas/CreateDonor'
                   CreateIndividual: '#/components/schemas/CreateIndividual'
                 propertyName: schema_type
+              oneOf:
+              - $ref: '#/components/schemas/CreateDonor'
+              - $ref: '#/components/schemas/CreateIndividual'
             type: array
           - items:
               type: string
@@ -1131,16 +1131,16 @@ components:
         has_protocol:
           anyOf:
           - items:
-              anyOf:
-              - $ref: '#/components/schemas/CreateSequencingProtocol'
-              - $ref: '#/components/schemas/CreateLibraryPreparationProtocol'
-              - $ref: '#/components/schemas/CreateProtocol'
               discriminator:
                 mapping:
                   CreateLibraryPreparationProtocol: '#/components/schemas/CreateLibraryPreparationProtocol'
                   CreateProtocol: '#/components/schemas/CreateProtocol'
                   CreateSequencingProtocol: '#/components/schemas/CreateSequencingProtocol'
                 propertyName: schema_type
+              oneOf:
+              - $ref: '#/components/schemas/CreateSequencingProtocol'
+              - $ref: '#/components/schemas/CreateLibraryPreparationProtocol'
+              - $ref: '#/components/schemas/CreateProtocol'
             type: array
           - items:
               type: string
@@ -1236,7 +1236,7 @@ components:
           title: Has Output
         has_protocol:
           anyOf:
-          - anyOf:
+          - oneOf:
             - $ref: '#/components/schemas/CreateSequencingProtocol'
             - $ref: '#/components/schemas/CreateLibraryPreparationProtocol'
             - $ref: '#/components/schemas/CreateProtocol'
@@ -1400,14 +1400,14 @@ components:
         has_children:
           anyOf:
           - items:
-              anyOf:
-              - $ref: '#/components/schemas/CreateDonor'
-              - $ref: '#/components/schemas/CreateIndividual'
               discriminator:
                 mapping:
                   CreateDonor: '#/components/schemas/CreateDonor'
                   CreateIndividual: '#/components/schemas/CreateIndividual'
                 propertyName: schema_type
+              oneOf:
+              - $ref: '#/components/schemas/CreateDonor'
+              - $ref: '#/components/schemas/CreateIndividual'
             type: array
           - items:
               type: string
@@ -1442,14 +1442,14 @@ components:
         has_parent:
           anyOf:
           - items:
-              anyOf:
-              - $ref: '#/components/schemas/CreateDonor'
-              - $ref: '#/components/schemas/CreateIndividual'
               discriminator:
                 mapping:
                   CreateDonor: '#/components/schemas/CreateDonor'
                   CreateIndividual: '#/components/schemas/CreateIndividual'
                 propertyName: schema_type
+              oneOf:
+              - $ref: '#/components/schemas/CreateDonor'
+              - $ref: '#/components/schemas/CreateIndividual'
             type: array
           - items:
               type: string
@@ -1932,7 +1932,7 @@ components:
           title: Has Biospecimen
         has_individual:
           anyOf:
-          - anyOf:
+          - oneOf:
             - $ref: '#/components/schemas/CreateDonor'
             - $ref: '#/components/schemas/CreateIndividual'
           - type: string
@@ -2312,14 +2312,14 @@ components:
         has_individual:
           anyOf:
           - items:
-              anyOf:
-              - $ref: '#/components/schemas/CreateDonor'
-              - $ref: '#/components/schemas/CreateIndividual'
               discriminator:
                 mapping:
                   CreateDonor: '#/components/schemas/CreateDonor'
                   CreateIndividual: '#/components/schemas/CreateIndividual'
                 propertyName: schema_type
+              oneOf:
+              - $ref: '#/components/schemas/CreateDonor'
+              - $ref: '#/components/schemas/CreateIndividual'
             type: array
           - items:
               type: string
@@ -2347,16 +2347,16 @@ components:
         has_protocol:
           anyOf:
           - items:
-              anyOf:
-              - $ref: '#/components/schemas/CreateSequencingProtocol'
-              - $ref: '#/components/schemas/CreateLibraryPreparationProtocol'
-              - $ref: '#/components/schemas/CreateProtocol'
               discriminator:
                 mapping:
                   CreateLibraryPreparationProtocol: '#/components/schemas/CreateLibraryPreparationProtocol'
                   CreateProtocol: '#/components/schemas/CreateProtocol'
                   CreateSequencingProtocol: '#/components/schemas/CreateSequencingProtocol'
                 propertyName: schema_type
+              oneOf:
+              - $ref: '#/components/schemas/CreateSequencingProtocol'
+              - $ref: '#/components/schemas/CreateLibraryPreparationProtocol'
+              - $ref: '#/components/schemas/CreateProtocol'
             type: array
           - items:
               type: string
@@ -2584,7 +2584,9 @@ components:
       properties:
         loc:
           items:
-            type: string
+            anyOf:
+            - type: string
+            - type: integer
           title: Location
           type: array
         msg:
