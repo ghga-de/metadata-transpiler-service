@@ -3,4 +3,7 @@
 -r requirements-dev-common.txt
 
 # additional requirements can be listed here
-testcontainers[kafka,mongo]==3.4.1
+fastapi==0.89.1
+uvicorn[standard]==0.20.0
+httpyexpect==0.2.4
+requests==2.28.1
