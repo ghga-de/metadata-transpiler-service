@@ -52,6 +52,7 @@ async def index():
 async def convert_xlsx_to_json(file: UploadFile = File(...)):
     """Convert the uploaded spreadsheet into JSON according to the CreateSubmission model"""
 
+    print("Start mapping")
     submission_map = await read_mapping_file()
     sheet_names = list(submission_map.keys())
     temp_file: Union[SpooledTemporaryFile, IO] = file.file
