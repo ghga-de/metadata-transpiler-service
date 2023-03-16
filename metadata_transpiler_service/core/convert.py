@@ -218,11 +218,13 @@ async def convert_value(
         field_value = await normalize(field_value)
     if await is_integer(model_schema["properties"][field_name]):
         return int(float(field_value))
-    if await is_array(model_schema["properties"][field_name]):
-        return await transform(
-            field_value, field_name, model_schema["title"], single_col_name
-        )
-    return field_value
+    final_value = await transform(
+        field_value, field_name, model_schema["title"], single_col_name
+    )
+    if not await is_array(model_schema["properties"][field_name]):
+        return final_value[0]
+
+    return final_value
 
 
 async def normalize(cell_value: str) -> str:
