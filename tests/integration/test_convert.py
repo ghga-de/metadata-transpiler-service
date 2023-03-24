@@ -15,6 +15,7 @@
 
 """Test the api module"""
 
+import io
 from zipfile import ZipFile
 
 from fastapi import status
@@ -34,7 +35,9 @@ def test_convert_xlsx():
     )
 
     with ZipFile(file_path_zip, "r") as zip_obj:
-        xls_file = {"file": zip_obj.open("submission_example.xlsx", "r")}
+        with zip_obj.open("submission_example.xlsx", "r") as xls_file_obj:
+            xls_bin_stream = io.BytesIO(xls_file_obj.read())
+        xls_file = {"file": xls_bin_stream}
         response = client.post("/convert", files=xls_file)
 
         assert response.status_code == status.HTTP_200_OK
@@ -59,7 +62,9 @@ def test_convert_xlsx():
         assert "has_file" in create_submission_entity
 
     with ZipFile(file_path_zip, "r") as zip_obj:
-        xls_file = {"file": zip_obj.open("submission_example_empty_columns.xlsx", "r")}
+        with zip_obj.open("submission_example_empty_columns.xlsx", "r") as xls_file_obj:
+            xls_bin_stream = io.BytesIO(xls_file_obj.read())
+        xls_file = {"file": xls_bin_stream}
         response = client.post("/convert", files=xls_file)
 
         assert response.status_code == status.HTTP_200_OK
