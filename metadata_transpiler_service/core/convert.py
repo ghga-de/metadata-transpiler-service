@@ -95,15 +95,19 @@ async def generate_embedded_json_from(
                     submission_field_name,
                     line,
                 )
-                if embedded_json_fields:
+                if not embedded_json_fields:
+                    continue
+                alias_list = [
+                    v.strip() for v in embedded_json_fields["alias"].split(";")
+                ]
+                for entity_alias in alias_list:
                     if submission_field.startswith("link_"):
+                        embedded_json_fields["alias"] = entity_alias
                         ref_dictionary = await get_refs(
                             embedded_json_fields, ref_dictionary
                         )
 
-                    if not await exists_in(
-                        embedded_json_fields["alias"], embedded_list
-                    ):
+                    if not await exists_in(entity_alias, embedded_list):
                         embedded_list.append(embedded_json_fields)
 
         if submission_field.startswith("link_"):
@@ -237,7 +241,10 @@ async def transform(
 ) -> List:
     """Transform string value to list of values depending on the required type
     (string, array, attribute(s), enumeration, embedded entity (concept))"""
-    list_values = cell_value.split(";")
+    if cell_type != "alias":
+        list_values = [v.strip() for v in cell_value.split(";")]
+    else:
+        list_values = [cell_value]
     if cell_type == "has_attribute":
         list_attr = []
         if single_col_name is not None:
