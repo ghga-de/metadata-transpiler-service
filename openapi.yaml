@@ -71,8 +71,14 @@ components:
     CaseControlStatusEnum:
       description: An enumeration.
       enum:
-      - control
-      - case
+      - unable_to_assess_case_or_control_status
+      - neither_case_or_control_status
+      - probable_case_status
+      - probable_control_status
+      - true_case_status
+      - true_control_status
+      - tumor
+      - healthy
       title: CaseControlStatusEnum
       type: string
     CreateAgent:
@@ -414,51 +420,14 @@ components:
           description: Description of an entity.
           title: Description
           type: string
-        has_anatomical_entity:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/CreateAnatomicalEntity'
-            type: array
-          - items:
-              type: string
-            type: array
-          description: The Anatomical entity, that represents the site, from which
-            the Biospecimen was retrieved. Typically, a concept from Uber-anatomy
-            Ontology (UBERON). For example, 'UBERON:0008307' indicates that the Biospecimen
-            was extracted from the 'Heart Endothelium' of an Individual.
-          title: Has Anatomical Entity
-        has_disease:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/CreateDisease'
-            type: array
-          - items:
-              type: string
-            type: array
-          description: The Disease entity that is associated with the Individual.
-            Typically, a concept from Mondo Disease Ontology. For example, 'MONDO:0005267'
-            indicates that the Individual suffers from 'Heart Disease'.
-          title: Has Disease
         has_individual:
           anyOf:
-          - anyOf:
+          - oneOf:
             - $ref: '#/components/schemas/CreateDonor'
             - $ref: '#/components/schemas/CreateIndividual'
           - type: string
           description: The Individual entity from which this Biospecimen was derived.
           title: Has Individual
-        has_phenotypic_feature:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/CreatePhenotypicFeature'
-            type: array
-          - items:
-              type: string
-            type: array
-          description: The Phenotypic Feature entity that is associated with the Individual.
-            Typically, a concept from Human Phenotype Ontology. For example, 'HP:0100244'
-            indicates that the Individual exhibits 'Fibrosarcoma' as one of its phenotype.
-          title: Has Phenotypic Feature
         isolation:
           description: Method or device employed for collecting/isolating a biospecimen
             or a sample.
@@ -606,13 +575,25 @@ components:
           - type: string
           description: The Data Access Committee linked to this policy.
           title: Has Data Access Committee
-        has_data_use_condition:
-          description: Data Use Condition entities that are associated with the Data
-            Access Policy.
-          items:
-            $ref: '#/components/schemas/CreateDataUseCondition'
-          title: Has Data Use Condition
-          type: array
+        has_data_use_modifier:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CreateDataUseModifier'
+            type: array
+          - items:
+              type: string
+            type: array
+          description: Modifier for Data use permission associated with a policy.
+            Should be descendants of 'DUO:0000017 data use modifier'
+          title: Has Data Use Modifier
+        has_data_use_permission:
+          anyOf:
+          - $ref: '#/components/schemas/CreateDataUsePermission'
+          - type: string
+          description: Data use permission associated with a policy. Typically one
+            or more terms from DUO and should be descendants of 'DUO:0000001 data
+            use permission'.
+          title: Has Data Use Permission
         name:
           description: A name for the Data Access Policy.
           title: Name
@@ -645,48 +626,6 @@ components:
       required:
       - schema_type
       title: CreateDataAccessPolicy
-      type: object
-    CreateDataUseCondition:
-      description: Data Use Condition represents the use conditions associated with
-        a policy.
-      properties:
-        alias:
-          description: The alias for an entity.
-          title: Alias
-          type: string
-        has_data_use_modifier:
-          anyOf:
-          - $ref: '#/components/schemas/CreateDataUseModifier'
-          - type: string
-          description: Modifier for Data use permission associated with a policy.
-            Should be descendants of 'DUO:0000017 data use modifier'
-          title: Has Data Use Modifier
-        has_data_use_permission:
-          anyOf:
-          - $ref: '#/components/schemas/CreateDataUsePermission'
-          - type: string
-          description: Data use permission associated with a policy. Typically one
-            or more terms from DUO and should be descendants of 'DUO:0000001 data
-            use permission'.
-          title: Has Data Use Permission
-        schema_type:
-          enum:
-          - CreateDataUseCondition
-          title: Schema Type
-          type: string
-        schema_version:
-          description: The version of the schema an instance corresponds to.
-          title: Schema Version
-          type: string
-        xref:
-          description: Database cross references for an entity.
-          items:
-            type: string
-          title: Xref
-          type: array
-      required:
-      - schema_type
-      title: CreateDataUseCondition
       type: object
     CreateDataUseModifier:
       description: Data use modifiers indicate additional conditions for use.
@@ -1032,14 +971,14 @@ components:
         has_children:
           anyOf:
           - items:
-              anyOf:
-              - $ref: '#/components/schemas/CreateDonor'
-              - $ref: '#/components/schemas/CreateIndividual'
               discriminator:
                 mapping:
                   CreateDonor: '#/components/schemas/CreateDonor'
                   CreateIndividual: '#/components/schemas/CreateIndividual'
                 propertyName: schema_type
+              oneOf:
+              - $ref: '#/components/schemas/CreateDonor'
+              - $ref: '#/components/schemas/CreateIndividual'
             type: array
           - items:
               type: string
@@ -1069,14 +1008,14 @@ components:
         has_parent:
           anyOf:
           - items:
-              anyOf:
-              - $ref: '#/components/schemas/CreateDonor'
-              - $ref: '#/components/schemas/CreateIndividual'
               discriminator:
                 mapping:
                   CreateDonor: '#/components/schemas/CreateDonor'
                   CreateIndividual: '#/components/schemas/CreateIndividual'
                 propertyName: schema_type
+              oneOf:
+              - $ref: '#/components/schemas/CreateDonor'
+              - $ref: '#/components/schemas/CreateIndividual'
             type: array
           - items:
               type: string
@@ -1192,16 +1131,16 @@ components:
         has_protocol:
           anyOf:
           - items:
-              anyOf:
-              - $ref: '#/components/schemas/CreateSequencingProtocol'
-              - $ref: '#/components/schemas/CreateLibraryPreparationProtocol'
-              - $ref: '#/components/schemas/CreateProtocol'
               discriminator:
                 mapping:
                   CreateLibraryPreparationProtocol: '#/components/schemas/CreateLibraryPreparationProtocol'
                   CreateProtocol: '#/components/schemas/CreateProtocol'
                   CreateSequencingProtocol: '#/components/schemas/CreateSequencingProtocol'
                 propertyName: schema_type
+              oneOf:
+              - $ref: '#/components/schemas/CreateSequencingProtocol'
+              - $ref: '#/components/schemas/CreateLibraryPreparationProtocol'
+              - $ref: '#/components/schemas/CreateProtocol'
             type: array
           - items:
               type: string
@@ -1297,7 +1236,7 @@ components:
           title: Has Output
         has_protocol:
           anyOf:
-          - anyOf:
+          - oneOf:
             - $ref: '#/components/schemas/CreateSequencingProtocol'
             - $ref: '#/components/schemas/CreateLibraryPreparationProtocol'
             - $ref: '#/components/schemas/CreateProtocol'
@@ -1461,14 +1400,14 @@ components:
         has_children:
           anyOf:
           - items:
-              anyOf:
-              - $ref: '#/components/schemas/CreateDonor'
-              - $ref: '#/components/schemas/CreateIndividual'
               discriminator:
                 mapping:
                   CreateDonor: '#/components/schemas/CreateDonor'
                   CreateIndividual: '#/components/schemas/CreateIndividual'
                 propertyName: schema_type
+              oneOf:
+              - $ref: '#/components/schemas/CreateDonor'
+              - $ref: '#/components/schemas/CreateIndividual'
             type: array
           - items:
               type: string
@@ -1503,14 +1442,14 @@ components:
         has_parent:
           anyOf:
           - items:
-              anyOf:
-              - $ref: '#/components/schemas/CreateDonor'
-              - $ref: '#/components/schemas/CreateIndividual'
               discriminator:
                 mapping:
                   CreateDonor: '#/components/schemas/CreateDonor'
                   CreateIndividual: '#/components/schemas/CreateIndividual'
                 propertyName: schema_type
+              oneOf:
+              - $ref: '#/components/schemas/CreateDonor'
+              - $ref: '#/components/schemas/CreateIndividual'
             type: array
           - items:
               type: string
@@ -1659,8 +1598,10 @@ components:
         target_regions:
           description: Subset of genes or specific regions of the genome, which are
             most likely to be involved in the phenotype under study.
+          items:
+            type: string
           title: Target Regions
-          type: string
+          type: array
         type:
           description: The type of an entity.
           title: Type
@@ -1991,16 +1932,26 @@ components:
           title: Has Biospecimen
         has_individual:
           anyOf:
-          - anyOf:
+          - oneOf:
             - $ref: '#/components/schemas/CreateDonor'
             - $ref: '#/components/schemas/CreateIndividual'
           - type: string
           description: The Individual from which this Sample was derived from.
           title: Has Individual
+        index_sequence:
+          description: A unique nucleotide sequence that is added to a sample during
+            library preparation to serve as a unique identifier for the sample.
+          title: Index Sequence
+          type: string
         isolation:
           description: Method or device employed for collecting/isolating a biospecimen
             or a sample.
           title: Isolation
+          type: string
+        lane_number:
+          description: The numerical identifier for the lane or machine unit where
+            a sample was located during nucleotide sequencing.
+          title: Lane Number
           type: string
         name:
           description: Name of the sample (eg:GHGAS_Blood_Sample1 or GHGAS_PBMC_RNAseq_S1).
@@ -2097,20 +2048,10 @@ components:
           - type: string
           description: The file associated with an entity.
           title: Has File
-        index_sequence:
-          description: A unique nucleotide sequence that is added to a sample during
-            library preparation to serve as a unique identifier for the sample.
-          title: Index Sequence
-          type: string
         instrument_model:
           description: The name and model of the technology platform used to perform
             sequencing.
           title: Instrument Model
-          type: string
-        lane_number:
-          description: The numerical identifier for the lane or machine unit where
-            a sample was located during nucleotide sequencing.
-          title: Lane Number
           type: string
         name:
           description: The name for an entity.
@@ -2371,14 +2312,14 @@ components:
         has_individual:
           anyOf:
           - items:
-              anyOf:
-              - $ref: '#/components/schemas/CreateDonor'
-              - $ref: '#/components/schemas/CreateIndividual'
               discriminator:
                 mapping:
                   CreateDonor: '#/components/schemas/CreateDonor'
                   CreateIndividual: '#/components/schemas/CreateIndividual'
                 propertyName: schema_type
+              oneOf:
+              - $ref: '#/components/schemas/CreateDonor'
+              - $ref: '#/components/schemas/CreateIndividual'
             type: array
           - items:
               type: string
@@ -2406,16 +2347,16 @@ components:
         has_protocol:
           anyOf:
           - items:
-              anyOf:
-              - $ref: '#/components/schemas/CreateSequencingProtocol'
-              - $ref: '#/components/schemas/CreateLibraryPreparationProtocol'
-              - $ref: '#/components/schemas/CreateProtocol'
               discriminator:
                 mapping:
                   CreateLibraryPreparationProtocol: '#/components/schemas/CreateLibraryPreparationProtocol'
                   CreateProtocol: '#/components/schemas/CreateProtocol'
                   CreateSequencingProtocol: '#/components/schemas/CreateSequencingProtocol'
                 propertyName: schema_type
+              oneOf:
+              - $ref: '#/components/schemas/CreateSequencingProtocol'
+              - $ref: '#/components/schemas/CreateLibraryPreparationProtocol'
+              - $ref: '#/components/schemas/CreateProtocol'
             type: array
           - items:
               type: string
@@ -2643,7 +2584,9 @@ components:
       properties:
         loc:
           items:
-            type: string
+            anyOf:
+            - type: string
+            - type: integer
           title: Location
           type: array
         msg:

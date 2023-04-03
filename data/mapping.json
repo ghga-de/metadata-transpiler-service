@@ -31,11 +31,11 @@
     "has_publication": {
       "abstract": "publication_abstract",
       "alias": "publication_id",
-      "author": "author",
-      "journal": "journal",
+      "author": "publication_author",
+      "journal": "publication_journal",
       "title": "publication_title",
       "xref": "publication_xref",
-      "year": "year_of_publication"
+      "year": "publication_year"
     },
     "has_study": {
       "affiliation": "study_affiliations",
@@ -52,13 +52,15 @@
     "has_data_access_committee": {
       "alias": "dac_alias",
       "has_member": "dac_email",
-      "main_contact": "dac_email"
+      "main_contact": "dac_email",
+      "name": "dac_alias"
     },
     "has_data_access_policy": {
       "alias": "dap_alias",
       "description": "dap_description",
       "has_data_access_committee": "dac_alias",
-      "has_data_use_conditions": "dap_data_use_conditions",
+      "has_data_use_modifier": "dap_data_use_modifier",
+      "has_data_use_permission": "dap_data_use_permission",
       "name": "dap_name",
       "policy_text": "dap_policy_text",
       "policy_url": "dap_policy_url"
@@ -109,10 +111,10 @@
         "description": "seq_description",
         "flow_cell_id": "seq_flow_cell_id",
         "flow_cell_type": "seq_flow_cell_type",
+        "forward_or_reverse": "seq_forward_or_reverse",
         "has_attribute": "seq_attributes",
         "instrument_model": "seq_instrument_model",
         "sample_barcode_read": "seq_sample_barcode_read",
-        "seq_forward_or_reverse": "seq_forward_or_reverse",
         "sequencing_center": "seq_center",
         "sequencing_read_length": "seq_read_length",
         "target_coverage": "seq_target_coverage",
@@ -165,15 +167,13 @@
       "alias": "submitter_sample_alias",
       "case_control_status": "sample_case_control_status",
       "description": "sample_description",
-      "has_additional_attribute": [
-        "sample_index_sequence",
-        "sample_lane_number"
-      ],
       "has_anatomical_entity": "sample_tissue",
       "has_attribute": "sample_attributes",
       "has_biospecimen": "submitter_biospecimen_alias",
       "has_individual": "submitter_individual_alias",
+      "index_sequence": "sample_index_sequence",
       "isolation": "sample_isolation",
+      "lane_number": "sample_lane_number",
       "name": "sample_name",
       "storage": "sample_storage",
       "type": "sample_type",

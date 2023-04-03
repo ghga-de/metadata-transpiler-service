@@ -14,6 +14,7 @@
 # limitations under the License.
 
 """Entrypoint of the package"""
+import asyncio
 
 from ghga_service_chassis_lib.api import run_server
 
@@ -23,7 +24,9 @@ from .config import CONFIG, Config
 
 def run(config: Config = CONFIG):
     """Run the service"""
-    run_server(app="metadata_transpiler_service.__main__:app", config=config)
+    asyncio.run(
+        run_server(app="metadata_transpiler_service.__main__:app", config=config)
+    )
 
 
 if __name__ == "__main__":

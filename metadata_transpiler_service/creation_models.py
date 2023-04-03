@@ -27,31 +27,27 @@ from pydantic import BaseModel, Field
 from typing_extensions import Annotated
 
 metamodel_version = "None"
-version = "0.9.0"
+version = "0.9.1"
 
 
 class BiologicalSexEnum(str, Enum):
-
     female = "female"
     male = "male"
     unknown = "unknown"
 
 
 class UserRoleEnum(str, Enum):
-
     data_requester = "data_requester"
     data_steward = "data_steward"
 
 
 class VitalStatusEnum(str, Enum):
-
     alive = "alive"
     deceased = "deceased"
     unknown = "unknown"
 
 
 class StudyTypeEnum(str, Enum):
-
     whole_genome_sequencing = "whole_genome_sequencing"
     metagenomics = "metagenomics"
     transcriptome_analysis = "transcriptome_analysis"
@@ -70,7 +66,6 @@ class StudyTypeEnum(str, Enum):
 
 
 class FileFormatEnum(str, Enum):
-
     bam = "bam"
     complete_genomics = "complete_genomics"
     cram = "cram"
@@ -86,43 +81,42 @@ class FileFormatEnum(str, Enum):
 
 
 class CaseControlStatusEnum(str, Enum):
-
-    control = "control"
-    case = "case"
+    unable_to_assess_case_or_control_status = "unable_to_assess_case_or_control_status"
+    neither_case_or_control_status = "neither_case_or_control_status"
+    probable_case_status = "probable_case_status"
+    probable_control_status = "probable_control_status"
+    true_case_status = "true_case_status"
+    true_control_status = "true_control_status"
+    tumor = "tumor"
+    healthy = "healthy"
 
 
 class PairedOrSingleEndEnum(str, Enum):
-
     paired = "paired"
     single = "single"
 
 
 class ForwardOrReverseEnum(str, Enum):
-
     forward = "forward"
     reverse = "reverse"
 
 
 class SubmissionStatusEnum(str, Enum):
-
     in_progress = "in_progress"
     completed = "completed"
 
 
 class ReleaseStatusEnum(str, Enum):
-
     unreleased = "unreleased"
     released = "released"
 
 
 class ExperimentProcessTypeEnum(str, Enum):
-
     sample_preparation = "sample_preparation"
     assay = "assay"
 
 
 class AgeRangeEnum(str, Enum):
-
     number_0_5 = "0-5"
     number_6_10 = "6-10"
     number_11_15 = "11-15"
@@ -580,29 +574,6 @@ class CreateAnalysisProcess(PlannedProcess):
     )
 
 
-class CreateDataUseCondition(InformationContentEntity):
-    """
-    Data Use Condition represents the use conditions associated with a policy.
-    """
-
-    has_data_use_permission: Union[CreateDataUsePermission, str] = Field(
-        None,
-        description="""Data use permission associated with a policy. Typically one or more terms from DUO and should be descendants of 'DUO:0000001 data use permission'.""",
-    )
-    has_data_use_modifier: Optional[Union[CreateDataUseModifier, str]] = Field(
-        None,
-        description="""Modifier for Data use permission associated with a policy. Should be descendants of 'DUO:0000017 data use modifier'""",
-    )
-    alias: str = Field(None, description="""The alias for an entity.""")
-    xref: Optional[List[str]] = Field(
-        None, description="""Database cross references for an entity."""
-    )
-    schema_type: Literal["CreateDataUseCondition"]  # type: ignore
-    schema_version: Optional[str] = Field(
-        None, description="""The version of the schema an instance corresponds to."""
-    )
-
-
 class CreateMember(Person):
     """
     Member of an Organization or a Committee.
@@ -802,7 +773,7 @@ class CreateSubmission(BaseModel):
         None,
         description="""Institution/Center/Data Hub that is providing this submission.""",
     )
-    has_study: Optional[Union[CreateStudy, str]] = Field(
+    has_study: Union[CreateStudy, str] = Field(
         None,
         description="""Information about a Study entities associated with this submission.""",
     )
@@ -810,7 +781,7 @@ class CreateSubmission(BaseModel):
         None,
         description="""Information about a Project entity associated with this submission.""",
     )
-    has_sample: Optional[Union[List[CreateSample], List[str]]] = Field(
+    has_sample: Union[List[CreateSample], List[str]] = Field(
         None,
         description="""Information about one or more Sample entities associated with this submission.""",
     )
@@ -818,15 +789,15 @@ class CreateSubmission(BaseModel):
         None,
         description="""Information about one or more Biospecimen entities associated with this submission.""",
     )
-    has_individual: Optional[Union[List[AnnotatedCreateIndividual], List[str]]] = Field(
+    has_individual: Union[List[AnnotatedCreateIndividual], List[str]] = Field(
         None,
         description="""Information about one or more Individual entities associated with this submission.""",
     )
-    has_experiment: Optional[Union[List[CreateExperiment], List[str]]] = Field(
+    has_experiment: Union[List[CreateExperiment], List[str]] = Field(
         None,
         description="""Information about one or more Experiment entities associated with this submission.""",
     )
-    has_protocol: Optional[Union[List[AnnotatedCreateProtocol], List[str]]] = Field(
+    has_protocol: Union[List[AnnotatedCreateProtocol], List[str]] = Field(
         None,
         description="""One or more Protocol entities associated with this Submission.""",
     )
@@ -838,22 +809,20 @@ class CreateSubmission(BaseModel):
         None,
         description="""Information about one or more File entities associated with this submission.""",
     )
-    has_dataset: Optional[Union[List[CreateDataset], List[str]]] = Field(
+    has_dataset: Union[List[CreateDataset], List[str]] = Field(
         None, description="""One or more Dataset that are part of this submission."""
     )
-    has_data_access_policy: Optional[
-        Union[List[CreateDataAccessPolicy], List[str]]
-    ] = Field(
+    has_data_access_policy: Union[List[CreateDataAccessPolicy], List[str]] = Field(
         None,
         description="""The Data Access Policy that applies to Dataset in this submission.""",
     )
-    has_data_access_committee: Optional[
-        Union[List[CreateDataAccessCommittee], List[str]]
+    has_data_access_committee: Union[
+        List[CreateDataAccessCommittee], List[str]
     ] = Field(
         None,
         description="""The Data Access Committee that applies to Dataset in this submission.""",
     )
-    has_member: Optional[Union[List[CreateMember], List[str]]] = Field(
+    has_member: Union[List[CreateMember], List[str]] = Field(
         None,
         description="""One or more member that are part of the Data Access Committee referenced in this submission.""",
     )
@@ -971,25 +940,9 @@ class CreateBiospecimen(MaterialEntity):
         None,
         description="""Methods by which a biospecimen or a sample is stored (e.g. frozen in liquid nitrogen).""",
     )
-    has_individual: Optional[Union[AnnotatedCreateIndividual, str]] = Field(
+    has_individual: Union[AnnotatedCreateIndividual, str] = Field(
         None,
         description="""The Individual entity from which this Biospecimen was derived.""",
-    )
-    has_anatomical_entity: Optional[
-        Union[List[CreateAnatomicalEntity], List[str]]
-    ] = Field(
-        None,
-        description="""The Anatomical entity, that represents the site, from which the Biospecimen was retrieved. Typically, a concept from Uber-anatomy Ontology (UBERON). For example, 'UBERON:0008307' indicates that the Biospecimen was extracted from the 'Heart Endothelium' of an Individual.""",
-    )
-    has_disease: Optional[Union[List[CreateDisease], List[str]]] = Field(
-        None,
-        description="""The Disease entity that is associated with the Individual. Typically, a concept from Mondo Disease Ontology. For example, 'MONDO:0005267' indicates that the Individual suffers from 'Heart Disease'.""",
-    )
-    has_phenotypic_feature: Optional[
-        Union[List[CreatePhenotypicFeature], List[str]]
-    ] = Field(
-        None,
-        description="""The Phenotypic Feature entity that is associated with the Individual. Typically, a concept from Human Phenotype Ontology. For example, 'HP:0100244' indicates that the Individual exhibits 'Fibrosarcoma' as one of its phenotype.""",
     )
     accession: Optional[str] = Field(
         None,
@@ -1216,10 +1169,10 @@ class CreateAnalysis(DataTransformation):
     has_input: Union[List[CreateFile], List[str]] = Field(
         None, description="""The input data File entities used in the Analysis."""
     )
-    has_study: Optional[Union[CreateStudy, str]] = Field(
+    has_study: Union[CreateStudy, str] = Field(
         None, description="""The Study entity associated with this Analysis."""
     )
-    has_workflow: Union[List[CreateWorkflow], List[str]] = Field(
+    has_workflow: Optional[Union[List[CreateWorkflow], List[str]]] = Field(
         None,
         description="""One or more Workflow entities associated with this Analysis.""",
     )
@@ -1233,6 +1186,10 @@ class CreateAnalysis(DataTransformation):
         None,
         description="""The output data File entities generated by this Analysis.""",
     )
+    description: Optional[str] = Field(
+        None,
+        description="""Describing how an Analysis was carried out. (e.g.: computational tools, settings, etc.).""",
+    )
     accession: Optional[str] = Field(
         None,
         description="""A unique GHGA identifier assigned to an entity for the sole purpose of referring to that entity in a global scope.""",
@@ -1243,10 +1200,6 @@ class CreateAnalysis(DataTransformation):
     )
     title: Optional[str] = Field(
         None, description="""The title that describes an entity."""
-    )
-    description: Optional[str] = Field(
-        None,
-        description="""Describing how an Analysis was carried out. (e.g.: computational tools, settings, etc.).""",
     )
     alias: str = Field(
         None, description="""An alias uniquely identifying this Analysis entitiy."""
@@ -1420,7 +1373,7 @@ class CreateProtocol(InformationContentEntity):
     url: Optional[str] = Field(
         None, description="""URL for the resource that describes this Protocol."""
     )
-    has_file: Optional[Union[CreateFile, str]] = Field(
+    has_file: Union[CreateFile, str] = Field(
         None, description="""A document that describes the Protocol."""
     )
     has_attribute: Optional[List[Attribute]] = Field(
@@ -1463,11 +1416,11 @@ class CreateLibraryPreparationProtocol(CreateProtocol):
         None,
         description="""The general method for sequencing library preparation (e.g. KAPA PCR-free).""",
     )
-    library_preparation_kit_retail_name: str = Field(
+    library_preparation_kit_retail_name: Optional[str] = Field(
         None,
         description="""A unique identifier for the kit used to construct a genomic library. This may include the vendor name, kit name and kit version  (e.g. Agilent sure select Human Exome V8, Twist RefSeq Exome, etc.)""",
     )
-    library_preparation_kit_manufacturer: str = Field(
+    library_preparation_kit_manufacturer: Optional[str] = Field(
         None, description="""Manufacturer of library preparation kit"""
     )
     primer: Optional[str] = Field(
@@ -1478,7 +1431,7 @@ class CreateLibraryPreparationProtocol(CreateProtocol):
         None,
         description="""The end of the cDNA molecule that is preferentially sequenced, e.g. 3/5 prime tag or end, or the full-length transcript.""",
     )
-    target_regions: Optional[str] = Field(
+    target_regions: Optional[List[str]] = Field(
         None,
         description="""Subset of genes or specific regions of the genome, which are most likely to be involved in the phenotype under study.""",
     )
@@ -1493,7 +1446,7 @@ class CreateLibraryPreparationProtocol(CreateProtocol):
         description="""Description about how a sequencing library was prepared (eg: Library construction method).""",
     )
     url: Optional[str] = Field(None, description="""A URL to a resource.""")
-    has_file: Optional[Union[CreateFile, str]] = Field(
+    has_file: Union[CreateFile, str] = Field(
         None, description="""The file associated with an entity."""
     )
     has_attribute: Optional[List[Attribute]] = Field(
@@ -1534,17 +1487,9 @@ class CreateSequencingProtocol(CreateProtocol):
         None,
         description="""Length of sequencing reads (eg: Long or short or actual number of the read length etc). The number of nucleotides successfully ordered from each side of a nucleic acid fragment obtained after the completion of a sequencing process""",
     )
-    index_sequence: Optional[str] = Field(
-        None,
-        description="""A unique nucleotide sequence that is added to a sample during library preparation to serve as a unique identifier for the sample.""",
-    )
     target_coverage: Optional[str] = Field(
         None,
         description="""Mean coverage for whole genome sequencing, or mean target coverage for whole exome and targeted sequencing. The number of times a particular locus (site, nucleotide, amplicon, region) was sequenced.""",
-    )
-    lane_number: Optional[str] = Field(
-        None,
-        description="""The numerical identifier for the lane or machine unit where a sample was located during nucleotide sequencing.""",
     )
     flow_cell_id: Optional[str] = Field(
         None,
@@ -1590,7 +1535,7 @@ class CreateSequencingProtocol(CreateProtocol):
         description="""Description about the sequencing protocol (eg: mRNA-seq,Whole exome long-read sequencing etc).""",
     )
     url: Optional[str] = Field(None, description="""A URL to a resource.""")
-    has_file: Optional[Union[CreateFile, str]] = Field(
+    has_file: Union[CreateFile, str] = Field(
         None, description="""The file associated with an entity."""
     )
     has_attribute: Optional[List[Attribute]] = Field(
@@ -1637,12 +1582,20 @@ class CreateSample(MaterialEntity):
         None,
         description="""Methods by which a biospecimen or a sample is stored (e.g. frozen in liquid nitrogen).""",
     )
+    index_sequence: Optional[str] = Field(
+        None,
+        description="""A unique nucleotide sequence that is added to a sample during library preparation to serve as a unique identifier for the sample.""",
+    )
+    lane_number: Optional[str] = Field(
+        None,
+        description="""The numerical identifier for the lane or machine unit where a sample was located during nucleotide sequencing.""",
+    )
     has_individual: Optional[Union[AnnotatedCreateIndividual, str]] = Field(
         None, description="""The Individual from which this Sample was derived from."""
     )
-    has_anatomical_entity: Optional[
-        Union[List[CreateAnatomicalEntity], List[str]]
-    ] = Field(None, description="""Anatomical site associated with an entity.""")
+    has_anatomical_entity: Union[List[CreateAnatomicalEntity], List[str]] = Field(
+        None, description="""Anatomical site associated with an entity."""
+    )
     has_biospecimen: Optional[Union[CreateBiospecimen, str]] = Field(
         None,
         description="""The Biospecimen from which this Sample was prepared from.""",
@@ -1717,26 +1670,30 @@ class CreateDataAccessPolicy(InformationContentEntity):
     A Data Access Policy specifies under which circumstances, legal or otherwise, a user can have access to one or more Datasets belonging to one or more Studies.
     """
 
-    name: Optional[str] = Field(
-        None, description="""A name for the Data Access Policy."""
-    )
-    description: Optional[str] = Field(
+    name: str = Field(None, description="""A name for the Data Access Policy.""")
+    description: str = Field(
         None, description="""A short description for the Data Access Policy."""
     )
     policy_text: str = Field(
         None,
         description="""The terms of data use and policy verbiage should be captured here.""",
     )
-    policy_url: Optional[str] = Field(
+    policy_url: str = Field(
         None,
         description="""URL for the policy, if available. This is useful if the terms of the policy is made available online at a resolvable URL.""",
     )
     has_data_access_committee: Union[CreateDataAccessCommittee, str] = Field(
         None, description="""The Data Access Committee linked to this policy."""
     )
-    has_data_use_condition: Optional[List[CreateDataUseCondition]] = Field(
+    has_data_use_permission: Union[CreateDataUsePermission, str] = Field(
         None,
-        description="""Data Use Condition entities that are associated with the Data Access Policy.""",
+        description="""Data use permission associated with a policy. Typically one or more terms from DUO and should be descendants of 'DUO:0000001 data use permission'.""",
+    )
+    has_data_use_modifier: Optional[
+        Union[List[CreateDataUseModifier], List[str]]
+    ] = Field(
+        None,
+        description="""Modifier for Data use permission associated with a policy. Should be descendants of 'DUO:0000017 data use modifier'""",
     )
     data_request_form: Optional[str] = Field(
         None,
@@ -1772,7 +1729,7 @@ class CreateDataAccessCommittee(Committee):
     description: Optional[str] = Field(
         None, description="""A description for the Data Access Committee."""
     )
-    main_contact: Optional[Union[CreateMember, str]] = Field(
+    main_contact: Union[CreateMember, str] = Field(
         None, description="""The main contact for the Data Access Committee."""
     )
     has_member: Optional[Union[List[CreateMember], List[str]]] = Field(
@@ -1989,7 +1946,6 @@ AnnotatedNamedThing = Annotated[
         CreateDataUsePermission,
         CreatePublication,
         CreateDataAccessPolicy,
-        CreateDataUseCondition,
         CreateDataset,
         CreateFile,
         CreateWorkflowStep,
@@ -2042,7 +1998,6 @@ CreateDiseaseOrPhenotypicFeature.update_forward_refs()
 Population.update_forward_refs()
 CreateAncestry.update_forward_refs()
 CreateAnalysisProcess.update_forward_refs()
-CreateDataUseCondition.update_forward_refs()
 CreateMember.update_forward_refs()
 CreatePublication.update_forward_refs()
 CreateAnatomicalEntity.update_forward_refs()
